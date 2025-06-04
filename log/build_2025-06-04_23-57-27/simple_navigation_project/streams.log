@@ -1,0 +1,39 @@
+[0.401s] Invoking command in '/home/allkg/demo_robotics/src/simple_navigation_project': PYTHONPATH=/home/allkg/demo_robotics/src/build/simple_navigation_project/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/simple_navigation_project build --build-base /home/allkg/demo_robotics/src/build/simple_navigation_project/build install --record /home/allkg/demo_robotics/src/build/simple_navigation_project/install.log --single-version-externally-managed install_data
+[0.551s] running egg_info
+[0.551s] creating ../build/simple_navigation_project/simple_navigation_project.egg-info
+[0.551s] writing ../build/simple_navigation_project/simple_navigation_project.egg-info/PKG-INFO
+[0.551s] writing dependency_links to ../build/simple_navigation_project/simple_navigation_project.egg-info/dependency_links.txt
+[0.551s] writing entry points to ../build/simple_navigation_project/simple_navigation_project.egg-info/entry_points.txt
+[0.551s] writing requirements to ../build/simple_navigation_project/simple_navigation_project.egg-info/requires.txt
+[0.552s] writing top-level names to ../build/simple_navigation_project/simple_navigation_project.egg-info/top_level.txt
+[0.552s] writing manifest file '../build/simple_navigation_project/simple_navigation_project.egg-info/SOURCES.txt'
+[0.552s] reading manifest file '../build/simple_navigation_project/simple_navigation_project.egg-info/SOURCES.txt'
+[0.553s] writing manifest file '../build/simple_navigation_project/simple_navigation_project.egg-info/SOURCES.txt'
+[0.553s] running build
+[0.553s] running build_py
+[0.553s] creating /home/allkg/demo_robotics/src/build/simple_navigation_project/build
+[0.553s] creating /home/allkg/demo_robotics/src/build/simple_navigation_project/build/lib
+[0.553s] creating /home/allkg/demo_robotics/src/build/simple_navigation_project/build/lib/simple_navigation_project
+[0.553s] copying simple_navigation_project/__init__.py -> /home/allkg/demo_robotics/src/build/simple_navigation_project/build/lib/simple_navigation_project
+[0.553s] copying simple_navigation_project/obstacle_avoider.py -> /home/allkg/demo_robotics/src/build/simple_navigation_project/build/lib/simple_navigation_project
+[0.554s] running install
+[0.554s] running install_lib
+[0.554s] creating /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project
+[0.554s] copying /home/allkg/demo_robotics/src/build/simple_navigation_project/build/lib/simple_navigation_project/__init__.py -> /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project
+[0.554s] copying /home/allkg/demo_robotics/src/build/simple_navigation_project/build/lib/simple_navigation_project/obstacle_avoider.py -> /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project
+[0.554s] byte-compiling /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project/__init__.py to __init__.cpython-310.pyc
+[0.554s] byte-compiling /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project/obstacle_avoider.py to obstacle_avoider.cpython-310.pyc
+[0.555s] running install_data
+[0.555s] creating /home/allkg/demo_robotics/src/install/simple_navigation_project/share/ament_index
+[0.555s] creating /home/allkg/demo_robotics/src/install/simple_navigation_project/share/ament_index/resource_index
+[0.555s] creating /home/allkg/demo_robotics/src/install/simple_navigation_project/share/ament_index/resource_index/packages
+[0.555s] copying resource/simple_navigation_project -> /home/allkg/demo_robotics/src/install/simple_navigation_project/share/ament_index/resource_index/packages
+[0.555s] copying package.xml -> /home/allkg/demo_robotics/src/install/simple_navigation_project/share/simple_navigation_project
+[0.555s] creating /home/allkg/demo_robotics/src/install/simple_navigation_project/share/simple_navigation_project/launch
+[0.555s] copying launch/simple_navigation.launch.py -> /home/allkg/demo_robotics/src/install/simple_navigation_project/share/simple_navigation_project/launch
+[0.555s] running install_egg_info
+[0.556s] Copying ../build/simple_navigation_project/simple_navigation_project.egg-info to /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project-0.0.0-py3.10.egg-info
+[0.557s] running install_scripts
+[0.570s] Installing obstacle_avoider script to /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/simple_navigation_project
+[0.570s] writing list of installed files to '/home/allkg/demo_robotics/src/build/simple_navigation_project/install.log'
+[0.586s] Invoked command in '/home/allkg/demo_robotics/src/simple_navigation_project' returned '0': PYTHONPATH=/home/allkg/demo_robotics/src/build/simple_navigation_project/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/simple_navigation_project build --build-base /home/allkg/demo_robotics/src/build/simple_navigation_project/build install --record /home/allkg/demo_robotics/src/build/simple_navigation_project/install.log --single-version-externally-managed install_data

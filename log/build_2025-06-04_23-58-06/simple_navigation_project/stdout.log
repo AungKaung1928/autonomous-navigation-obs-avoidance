@@ -1,0 +1,22 @@
+running egg_info
+writing ../build/simple_navigation_project/simple_navigation_project.egg-info/PKG-INFO
+writing dependency_links to ../build/simple_navigation_project/simple_navigation_project.egg-info/dependency_links.txt
+writing entry points to ../build/simple_navigation_project/simple_navigation_project.egg-info/entry_points.txt
+writing requirements to ../build/simple_navigation_project/simple_navigation_project.egg-info/requires.txt
+writing top-level names to ../build/simple_navigation_project/simple_navigation_project.egg-info/top_level.txt
+reading manifest file '../build/simple_navigation_project/simple_navigation_project.egg-info/SOURCES.txt'
+writing manifest file '../build/simple_navigation_project/simple_navigation_project.egg-info/SOURCES.txt'
+running build
+running build_py
+copying simple_navigation_project/obstacle_avoider.py -> /home/allkg/demo_robotics/src/build/simple_navigation_project/build/lib/simple_navigation_project
+running install
+running install_lib
+copying /home/allkg/demo_robotics/src/build/simple_navigation_project/build/lib/simple_navigation_project/obstacle_avoider.py -> /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project
+byte-compiling /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project/obstacle_avoider.py to obstacle_avoider.cpython-310.pyc
+running install_data
+running install_egg_info
+removing '/home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../build/simple_navigation_project/simple_navigation_project.egg-info to /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/python3.10/site-packages/simple_navigation_project-0.0.0-py3.10.egg-info
+running install_scripts
+Installing obstacle_avoider script to /home/allkg/demo_robotics/src/install/simple_navigation_project/lib/simple_navigation_project
+writing list of installed files to '/home/allkg/demo_robotics/src/build/simple_navigation_project/install.log'

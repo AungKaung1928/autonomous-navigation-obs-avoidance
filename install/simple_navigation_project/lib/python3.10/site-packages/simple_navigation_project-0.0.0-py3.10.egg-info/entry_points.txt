@@ -1,0 +1,3 @@
+[console_scripts]
+obstacle_avoider = simple_navigation_project.obstacle_avoider:main
+
