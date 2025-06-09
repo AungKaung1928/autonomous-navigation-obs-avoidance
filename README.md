@@ -43,15 +43,6 @@ simple_navigation_project/
    - **Both sides blocked** → Turn around
 3. **Safety Features**: 50cm minimum distance threshold and error handling
 
-## 🚀 Quick Start
-
-### Prerequisites
-```bash
-# Install TurtleBot3 packages
-sudo apt install ros-humble-turtlebot3*
-sudo apt install ros-humble-gazebo-*
-```
-
 ### Build & Run
 ```bash
 # Clone and build
@@ -73,25 +64,8 @@ ros2 run simple_navigation_project obstacle_avoider
 
 ### Alternative: Complete Launch (Coming Soon)
 ```bash
-# Single command launch (under development)
+# Single command launch
 ros2 launch simple_navigation_project simple_navigation.launch.py
-```
-
-## 🎯 Key ROS2 Concepts Demonstrated
-
-- **Node-based Architecture**: Single-node obstacle avoidance system
-- **Publisher/Subscriber Pattern**: `/cmd_vel` publishing and `/scan` subscription
-- **Timer-based Control**: 10Hz navigation loop for responsive control
-- **Sensor Data Processing**: LiDAR range filtering and sectoral analysis
-- **Python Package Structure**: Proper entry points and dependencies
-- **Launch File Integration**: Automated system deployment
-
-## 📊 System Architecture
-
-```
-[LiDAR /scan] → [Obstacle Avoider Node] → [/cmd_vel] → [TurtleBot3 Movement]
-                        ↓
-            [Gazebo Simulation Environment]
 ```
 
 ## 🔧 Debugging Commands
@@ -111,51 +85,5 @@ ros2 node info /simple_obstacle_avoider
 ros2 topic info /scan
 ros2 topic info /cmd_vel
 ```
-
-## ⚙️ Configuration Parameters
-
-- **Minimum Distance**: 0.5m obstacle detection threshold
-- **Forward Speed**: 0.2 m/s safe navigation speed
-- **Angular Speed**: 0.5-1.0 rad/s turning rates
-- **Scan Sectors**: Front (340°-20°), Left (60°-120°), Right (240°-300°)
-
-## 🎓 Learning Outcomes
-
-- ROS2 Python node development and lifecycle management
-- LiDAR sensor data processing and interpretation
-- Real-time robotics decision-making algorithms
-- Gazebo simulation environment integration
-- ROS2 launch system configuration
-- Modern Python practices in robotics applications
-
-## 🤖 Demo Behavior
-
-The robot demonstrates autonomous navigation by:
-- **Continuous forward movement** when path is clear
-- **Right-preference turning** when obstacles detected ahead
-- **Left turning** as fallback when right is blocked
-- **180° rotation** when completely surrounded
-- **Real-time logging** of navigation decisions
-
-## 🚧 Known Issues & Future Improvements
-
-- [ ] Complete launch file integration with Gazebo spawning
-- [ ] Add dynamic reconfigure for parameters
-- [ ] Implement wall-following behavior
-- [ ] Add goal-oriented navigation
-- [ ] Enhance multi-robot support
-
-## 🔗 Dependencies
-
-```xml
-<!-- Key ROS2 dependencies -->
-<depend>rclpy</depend>
-<depend>geometry_msgs</depend>
-<depend>sensor_msgs</depend>
-<depend>gazebo_ros</depend>
-<depend>turtlebot3_gazebo</depend>
-```
-
----
 
 *"A foundational project for learning ROS2 navigation concepts and Python-based robotics development with TurtleBot3 simulation."*
