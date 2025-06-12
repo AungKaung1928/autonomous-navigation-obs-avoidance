@@ -45,7 +45,7 @@ simple_navigation_project/
 ```bash
 # Clone and build
 git clone <your-repo-url>
-cd demo_robotics_ws
+cd demo_robotics
 colcon build --packages-select simple_navigation_project
 source install/setup.bash
 
