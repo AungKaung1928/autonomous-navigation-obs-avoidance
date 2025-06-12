@@ -5,8 +5,6 @@ A ROS2 Python package that implements autonomous obstacle avoidance for TurtleBo
 ## 🚀 Features
 
 - **Real-time obstacle detection** using 360° LiDAR scanning
-- **Intelligent navigation logic** with multi-directional obstacle avoidance
-- **Python-based ROS2 implementation** for easy understanding and modification
 - **Gazebo simulation integration** with TurtleBot3 models
 - **Launch file automation** for streamlined deployment
 - **RViz visualization** support for real-time monitoring
@@ -37,7 +35,7 @@ simple_navigation_project/
 
 1. **LiDAR Processing**: Analyzes 360° laser scan data to detect obstacles in front, left, and right sectors
 2. **Decision Logic**: 
-   - **Front clear** → Move forward at 0.2 m/s
+   - **Front clear** → Move forward at 0.2 m/s(You can adjust the speed)
    - **Obstacle ahead + Right clear** → Turn right
    - **Obstacle ahead + Left clear** → Turn left  
    - **Both sides blocked** → Turn around
