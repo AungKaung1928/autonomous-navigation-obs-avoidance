@@ -85,5 +85,3 @@ ros2 node info /simple_obstacle_avoider
 ros2 topic info /scan
 ros2 topic info /cmd_vel
 ```
-
-*"A foundational project for learning ROS2 navigation concepts and Python-based robotics development with TurtleBot3 simulation."*
