@@ -60,7 +60,7 @@ source install/setup.bash
 ros2 run simple_navigation_project obstacle_avoider
 ```
 
-### Alternative: Complete Launch (Coming Soon)
+### Alternative: Complete Launch 
 ```bash
 # Single command launch
 ros2 launch simple_navigation_project simple_navigation.launch.py
