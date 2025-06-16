@@ -1,4 +1,4 @@
-# A Simple TurtleBot3 Obstacle Avoidance Navigator
+# A Simple TurtleBot3 Obstacle Avoidance Navigator Project
 
 A ROS2 Python package that implements autonomous obstacle avoidance for TurtleBot3 using LiDAR sensor data in Gazebo simulation.
 
