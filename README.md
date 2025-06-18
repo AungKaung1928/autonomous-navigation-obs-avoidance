@@ -11,7 +11,7 @@ A ROS2 Python package that implements autonomous obstacle avoidance for TurtleBo
 
 ## 🛠️ Technologies Used
 
-- **ROS2 Humble** (Python)
+- **ROS2 Humble**
 - **Gazebo Classic** simulation environment
 - **TurtleBot3 Burger** robot platform
 - **LiDAR sensor processing** with 360° coverage
