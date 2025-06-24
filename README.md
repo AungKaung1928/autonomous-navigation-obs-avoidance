@@ -52,7 +52,7 @@ source install/setup.bash
 # Set TurtleBot3 model
 export TURTLEBOT3_MODEL=burger
 
-# Terminal 1: Launch Gazebo world
+# Terminal 1: Launch Gazebo world (You can use custom map here)
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 
 # Terminal 2: Run obstacle avoider
