@@ -17,7 +17,7 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='allkg',
-    maintainer_email='allkg@todo.todo',
+    maintainer_email='user@todo.todo',
     description='Simple obstacle avoidance for TurtleBot3',
     license='Apache-2.0',
     tests_require=['pytest'],
