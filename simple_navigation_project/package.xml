@@ -4,7 +4,7 @@
   <name>simple_navigation_project</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="allkg@todo.todo">allkg</maintainer>
+  <maintainer email="username@gmail.com">user</maintainer>
   <license>TODO: License declaration</license>
 
   <depend>rclpy</depend>
@@ -13,6 +13,9 @@
   <depend>gazebo_ros</depend>
   <depend>turtlebot3_gazebo</depend>
   <depend>rviz2</depend>
+  <depend>nav2_bringup</depend>
+  <depend>nav2_controller</depend>
+  <depend>nav2_planner</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
