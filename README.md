@@ -98,4 +98,3 @@ The system has been tested in:
 	• ✅ Various obstacle configurations
 	• ✅ Narrow passage scenarios
 	• ✅ Dynamic environment changes
-![Uploading image.png…]()
