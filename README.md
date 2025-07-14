@@ -45,7 +45,7 @@ source install/setup.bash
 
 ### 1. Launch Gazebo
 ```bash
-# Terminal 1
+# Terminal 1 (This is my custom world, you can change your custom world here)
 cd ~/turtlebot3_ws
 colcon build
 source install/setup.bash
