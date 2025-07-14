@@ -1,64 +1,84 @@
-🤖 Autonomous Navigation with Obstacle Avoidance
-A ROS2-based autonomous navigation system for TurtleBot3 that enables continuous movement while avoiding obstacles in Gazebo simulation environments.
-📋 Requirements
-	• ROS Version: ROS2 Humble
-	• OS: Ubuntu 22.04
-	• Simulation: Gazebo Classic
-	• Language: Python
-	• Navigation: Navigation 2 (Nav2) stack
+🤖 TurtleBot3 Autonomous Navigation with Obstacle Avoidance
+A robust autonomous navigation system for TurtleBot3 that enables continuous movement while dynamically avoiding obstacles in Gazebo simulation environments.
+📋 System Requirements
+	• ROS Version: ROS2 Humble or higher
+	• Operating System: Ubuntu 22.04 LTS
+	• Simulation Environment: Gazebo Classic
+	• Programming Language: Python
+	• Navigation Framework: Navigation 2 (Nav2) stack
 🚀 Features
-	• ✅ Continuous autonomous movement
-	• 🛡️ Dynamic obstacle avoidance
-	• 🔍 Lane width analysis for safe navigation
-	• 📊 Real-time laser scan processing
-	• 🎯 Smart path selection algorithm
-🛠️ Build Instructions
-1. Prerequisites
-# Install ROS2 and TurtleBot3 packages
+	• Continuous Movement: Robot maintains forward motion whenever possible
+	• Dynamic Obstacle Avoidance: Real-time detection and avoidance of obstacles
+	• Intelligent Path Planning: Analyzes lane width for optimal navigation decisions
+	• Real-time Laser Processing: 360-degree laser scan analysis for comprehensive environment awareness
+	• Configurable Parameters: Adjustable safety margins and movement speeds
+🛠️ Installation and Setup
+Prerequisites
+Install ROS2 and required packages:
+# Update package manager
 sudo apt update
+# Install ROS2 Humble desktop full
 sudo apt install ros-humble-desktop-full
+# Install TurtleBot3 packages
 sudo apt install ros-humble-turtlebot3*
+# Install Navigation 2 stack
 sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup
-2. Environment Setup
-# Set TurtleBot3 model
+🔧 Environment Configuration
+Set up TurtleBot3 environment variables:
+# Configure TurtleBot3 model
 echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
 source ~/.bashrc
-3. Build the Project
-# Clone the repository
+📦 Build Process
+	1. Clone the Repository
 git clone https://github.com/AungKaung1928/autonomous-navigation-obs-avoidance.git
 cd autonomous-navigation-obs-avoidance
-# Build the workspace
+	2. Build the Workspace
 colcon build --packages-select simple_navigation_project
 source install/setup.bash
 🎮 Usage Instructions
-1. Launch Gazebo Classic World
-# Terminal 1: Start TurtleBot3 in your custom world (This is my custom world and you can create your new custom world)
+🌍 Launch Simulation Environment
+Open a new terminal and start the TurtleBot3 simulation:
+# Terminal 1: Launch Gazebo with TurtleBot3
 cd ~/turtlebot3_ws
 colcon build
 source install/setup.bash
-ros2 launch turtlebot3_gazebo turtlebot3_my_world.launch.py
-
-2. Start Navigation Stack
-# Terminal 2: Launch Navigation 2
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+🚀 Start Navigation System
+Open another terminal and launch the autonomous navigation:
+# Terminal 2: Start obstacle avoidance navigation
 ros2 launch simple_navigation_project nav2_simple.launch.py
+✅ Verification Commands
+Monitor the system operation with these commands:
+# Check active nodes
+ros2 node list
+# Monitor laser scan data
+ros2 topic echo /scan
+# Monitor velocity commands
+ros2 topic echo /cmd_vel
+# Check robot position
+ros2 topic echo /odom
+🏗️ System Architecture
+🔧 Core Components
+	1. Laser Scan Processor: Analyzes 360° laser data for obstacle detection
+	2. Lane Width Analyzer: Evaluates available space in multiple directions
+	3. Decision Engine: Selects optimal movement strategy based on environmental analysis
+	4. Motion Controller: Executes smooth movement commands
+🧠 Algorithm Overview
+The navigation system employs a multi-stage decision process:
+	• Forward Scanning: 40° range analysis for immediate obstacles
+	• Lateral Assessment: 60° scanning for left/right path evaluation
+	• Safety Validation: Ensures minimum clearance distances
+	• Path Selection: Chooses the safest available direction
+⚙️ Configuration
+System parameters can be adjusted in config/nav2_params.yaml:
+# Safety parameters
+minimum_safe_distance: 0.5    # meters
+minimum_lane_width: 0.8       # meters
+# Movement parameters (linear_speed/angular_speed can be adjusted)
+linear_speed: 0.3              # m/s
+angular_speed: 0.3             # rad/s
 
-🔧 Configuration
-The system uses configurable parameters in config/nav2_params.yaml:
-	• Minimum safe distance: 0.5m
-	• Minimum lane width: 0.8m
-	• Movement speed: 0.3 m/s
-	• Turn speed: 0.3 rad/s
-📊 How It Works
-	1. Laser Scan Processing: Analyzes 360° laser data to detect obstacles
-	2. Lane Width Analysis: Measures available space in left/right directions
-	3. Smart Decision Making: Chooses the safest and widest path
-	4. Continuous Movement: Maintains forward motion when path is clear
-🎯 Algorithm Features
-	• Front Detection: 40° scanning range for forward obstacles
-	• Side Analysis: 60° scanning for left/right path evaluation
-	• Safety Margins: Configurable minimum distances and lane widths
-	• Error Handling: Robust error recovery and logging
-📝 Project Structure
+📁 Project Structure
 demo_robotics/
 ├── src/
 │   └── simple_navigation_project/
@@ -73,28 +93,43 @@ demo_robotics/
 │           ├── __init__.py
 │           └── obstacle_avoider.py
 
-🔍 Debugging & Monitoring
-View Active Topics
-# List all active ROS2 topics
+🔍 Debugging and Monitoring
+🩺 System Diagnostics
+# View all active topics
 ros2 topic list
-# Monitor laser scan data
+# Monitor specific topics
 ros2 topic echo /scan
-# Monitor velocity commands
 ros2 topic echo /cmd_vel
-# Check robot odometry
 ros2 topic echo /odom
-Useful Commands
-# Check node information
-ros2 node info /simple_obstacle_avoider
-# View topic details
-ros2 topic info /scan
-ros2 topic info /cmd_vel
-# Monitor topic frequency
+# Check topic frequencies
 ros2 topic hz /scan
 ros2 topic hz /cmd_vel
-🧪 Testing
-The system has been tested in:
-	• ✅ TurtleBot3 standard world (Gazebo Classic)
-	• ✅ Various obstacle configurations
-	• ✅ Narrow passage scenarios
-	• ✅ Dynamic environment changes
+# Node information
+ros2 node info /simple_obstacle_avoider
+📊 Performance Monitoring
+# Check computation graph
+rqt_graph
+# View log messages
+ros2 log
+🧪 Testing and Validation
+The system has been validated in multiple scenarios:
+	• Standard World Navigation: Continuous movement in TurtleBot3 default world
+	• Obstacle-rich Environments: Navigation through complex obstacle configurations
+	• Narrow Passages: Safe traversal through constrained spaces
+	• Dynamic Scenarios: Adaptation to changing environmental conditions
+🔧 Troubleshooting
+⚠️ Common Issues
+	1. Gazebo Launch Issues
+		○ Ensure proper workspace sourcing
+		○ Verify TurtleBot3 model environment variable
+	2. Navigation Errors
+		○ Check laser scan topic availability
+		○ Verify Nav2 parameters configuration
+	3. Build Failures
+		○ Ensure all dependencies are installed
+		○ Check Python package requirements
+🚀 Performance Optimization
+	• Adjust laser scan frequency for better responsiveness
+	• Tune safety margins based on environment requirements
+	• Optimize angular velocity for smoother turns
+<img width="925" height="3387" alt="image" src="https://github.com/user-attachments/assets/49bc061a-a7d3-43fa-9cb9-ad69c65b383a" />
