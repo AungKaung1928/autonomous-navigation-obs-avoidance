@@ -97,7 +97,7 @@ source install/setup.bash
 
 ### Running the System
 
-**Terminal 1 - Launch Gazebo:**(This is custom world ws and world)
+**Terminal 1 - Launch Gazebo:**(This is custom ws and world)
 ```bash
 # Custom world workspace
 cd ~/turtlebot3_ws
