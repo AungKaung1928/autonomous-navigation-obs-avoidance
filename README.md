@@ -64,14 +64,14 @@ source ~/.bashrc
 
 ```bash
 # Create workspace
-mkdir -p ~/turtlebot3_ws/src
-cd ~/turtlebot3_ws/src
+mkdir -p ~/demo_robotics/src
+cd ~/demo_robotics/src
 
 # Clone repository
 git clone https://github.com/AungKaung1928/autonomous-navigation-obs-avoidance.git
 
 # Build
-cd ~/turtlebot3_ws
+cd ~/demo_robotics
 colcon build --packages-select simple_navigation_project
 source install/setup.bash
 ```
@@ -80,7 +80,7 @@ source install/setup.bash
 
 ### Running the System
 
-**Terminal 1 - Launch Gazebo:**
+**Terminal 1 - Launch Gazebo:**(This is custom world ws and world)
 ```bash
 # Custom world workspace
 cd ~/turtlebot3_ws
