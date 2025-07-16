@@ -85,7 +85,7 @@ mkdir -p ~/demo_robotics/src
 cd ~/demo_robotics/src
 
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/autonomous-navigation-demo.git
+git clone <repository-url> demo_robotics
 
 # Build
 cd ~/demo_robotics
