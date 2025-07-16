@@ -93,7 +93,6 @@ demo_robotics/
 │       ├── config/
 │       │   └── nav2_params.yaml
 │       ├── launch/
-│       │   ├── simple_navigation.launch.py
 │       │   └── nav2_simple.launch.py
 │       └── simple_navigation_project/
 │           ├── **init**.py
