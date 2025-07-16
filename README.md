@@ -60,6 +60,23 @@ echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
 source ~/.bashrc
 ```
 
+## 📁 Project Structure
+
+```
+~/demo_robotics/
+├── src/
+│   └── simple_navigation_project/
+│       ├── package.xml 
+│       ├── setup.py 
+│       ├── config/                   
+│       │   └── nav2_params.yaml       
+│       ├── launch/
+│       │   └── nav2_simple.launch.py 
+│       └── simple_navigation_project/
+│           ├── __init__.py
+│           └── obstacle_avoider.py
+```
+
 ## 🚀 Build Instructions
 
 ```bash
