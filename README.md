@@ -1,48 +1,48 @@
-# 🤖 TurtleBot3 Autonomous Navigation with Obstacle Avoidance
+# 🤖 TurtleBot3 Wall Follower
 
-Autonomous navigation system for TurtleBot3 with continuous movement and dynamic obstacle avoidance in Gazebo simulation.
+Autonomous wall-following robot using ROS2 and laser-based navigation with precise distance control and obstacle avoidance.
 
 ## 📋 Project Overview
 
-This project demonstrates advanced autonomous navigation capabilities using TurtleBot3 in a Gazebo simulation environment. The system showcases proficiency in:
+This project demonstrates autonomous wall-following capabilities using TurtleBot3 in a Gazebo simulation environment. The system showcases proficiency in:
 
-- **Autonomous Navigation**: Continuous movement without human intervention
-- **Obstacle Avoidance**: Real-time detection and avoidance of static and dynamic obstacles
-- **Navigation 2 Integration**: Professional use of ROS2 Nav2 stack
-- **Sensor Processing**: Real-time laser scan data processing and analysis
+- **Wall Following**: Maintains consistent distance from walls using PID control
+- **Obstacle Avoidance**: Real-time front obstacle detection and emergency stop
+- **Adaptive Navigation**: Seamless switching between left/right wall following
+- **Sensor Processing**: Real-time laser scan data analysis for wall detection
 
 ### 🎯 Project Specifications
 
-- **Primary Function**: Autonomous navigation with obstacle avoidance in standard TurtleBot3 world
-- **Target Application**: Mobile robotics, autonomous vehicles, service robots
-- **Performance**: Continuous operation with real-time obstacle detection
+- **Primary Function**: Autonomous wall following with 0.6m target distance
+- **Target Application**: Facility inspection, domestic robotics, educational demonstrations
+- **Performance**: Stable navigation without oscillation or spinning
 
 ## ⚙️ Technical Features
 
 ### 🔧 Implementation Features
 
-1. **Continuous Movement Algorithm**
-   - Smart path selection based on laser scan data
-   - Dynamic speed adjustment for safety
-   - Adaptive turning behavior in narrow spaces
+1. **Wall Detection Algorithm**
+   - Multi-point laser scan analysis for wall identification
+   - 270° laser range utilization for accurate distance measurement
+   - Robust wall presence detection logic
 
-2. **Obstacle Detection System**
-   - Real-time laser scan processing
-   - Configurable safe distance parameters
-   - Lane width detection for navigation decisions
+2. **PID Control System**
+   - Smooth angular velocity control for stable following
+   - Tunable gains for different environments
+   - Real-time error correction
 
-3. **Navigation Integration**
-   - Navigation 2 stack integration
-   - Custom parameter configuration
-   - Robust error handling and recovery
+3. **Safety Systems**
+   - Front-facing obstacle detection
+   - Emergency stop functionality
+   - Configurable safety parameters
 
 ## 📋 System Requirements
 
 - **ROS2 Humble** or higher
 - **Ubuntu 22.04 LTS**
 - **Gazebo Classic**
-- **Python**
-- **Navigation 2 (Nav2) stack**
+- **Python 3.8+**
+- **TurtleBot3 packages**
 
 ## 🛠️ Installation
 
@@ -51,7 +51,7 @@ This project demonstrates advanced autonomous navigation capabilities using Turt
 sudo apt update
 sudo apt install ros-humble-desktop-full
 sudo apt install ros-humble-turtlebot3*
-sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup
+sudo apt install ros-humble-gazebo-*
 ```
 
 ### Environment Setup
@@ -63,33 +63,39 @@ source ~/.bashrc
 ## 📁 Project Structure
 
 ```
-~/demo_robotics/
+~/turtlebot3_wall_follower_ws/
 ├── src/
-│   └── simple_navigation_project/
+│   └── wall_following_project/
 │       ├── package.xml 
 │       ├── setup.py 
 │       ├── config/                   
-│       │   └── nav2_params.yaml       
+│       │   ├── nav2_params.yaml
+│       │   └── wall_following_params.yaml       
 │       ├── launch/
-│       │   └── nav2_simple.launch.py 
-│       └── simple_navigation_project/
+│       │   ├── wall_following.launch.py 
+│       │   └── wall_follower_gazebo.launch.py
+│       ├── rviz/
+│       │   └── wall_follower_config.rviz
+│       └── wall_following_project/
 │           ├── __init__.py
-│           └── obstacle_avoider.py
+│           ├── wall_follower_controller.py  # Main control logic
+│           ├── wall_detector.py             # Wall detection algorithms
+│           └── pid_controller.py            # PID control system
 ```
 
 ## 🚀 Build Instructions
 
 ```bash
 # Create workspace
-mkdir -p ~/demo_robotics/src
-cd ~/demo_robotics/src
+mkdir -p ~/turtlebot3_wall_follower_ws/src
+cd ~/turtlebot3_wall_follower_ws/src
 
 # Clone repository
-git clone <repository-url> demo_robotics
+git clone <repository-url> wall_following_project
 
 # Build
-cd ~/demo_robotics
-colcon build --packages-select simple_navigation_project
+cd ~/turtlebot3_wall_follower_ws
+colcon build --packages-select wall_following_project
 source install/setup.bash
 ```
 
@@ -97,31 +103,33 @@ source install/setup.bash
 
 ### Running the System
 
-**Terminal 1 - Launch Gazebo:**(This is custom ws and world)
+**Terminal 1 - Launch Gazebo:**
 ```bash
-# Custom world workspace
-cd ~/turtlebot3_ws
-colcon build
-source install/setup.bash
-ros2 launch turtlebot3_gazebo turtlebot3_my_world.launch.py
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 
-**Terminal 2 - Start Navigation:**
+**Terminal 2 - Start Wall Follower:**
 ```bash
-# Navigation project workspace
-cd ~/demo_robotics
-colcon build --packages-select simple_navigation_project
+cd ~/turtlebot3_wall_follower_ws
 source install/setup.bash
-ros2 launch simple_navigation_project nav2_simple.launch.py
+ros2 launch wall_following_project wall_following.launch.py
+```
+
+### Alternative: Complete System Launch
+```bash
+cd ~/turtlebot3_wall_follower_ws
+source install/setup.bash
+ros2 launch wall_following_project wall_follower_gazebo.launch.py
 ```
 
 ### Expected Behavior
 
 The TurtleBot3 will:
-1. **Initialize** navigation system and sensor processing
-2. **Scan Environment** using laser sensors
-3. **Navigate Continuously** while avoiding obstacles
-4. **Adapt Path** dynamically based on sensor feedback
+1. **Initialize** wall detection and PID control systems
+2. **Detect Wall** using laser scan analysis
+3. **Follow Wall** maintaining 0.6m distance consistently
+4. **Avoid Obstacles** with emergency stop when front blocked
 
 ## ✅ Verification
 
@@ -129,67 +137,75 @@ The TurtleBot3 will:
 # Check active nodes
 ros2 node list
 
-# Monitor sensor data
-ros2 topic echo /scan
+# Monitor robot commands
 ros2 topic echo /cmd_vel
-ros2 topic echo /odom
+ros2 topic echo /scan
 
-# Verify navigation status
-ros2 topic list | grep nav
+# Check wall follower status
+ros2 node info /wall_follower_controller
 ```
 
 ## 📊 Technical Specifications
 
 ### Configuration Parameters
-- **Minimum Safe Distance**: 0.5m
-- **Minimum Lane Width**: 0.8m
-- **Linear Speed**: 0.3 m/s
-- **Angular Speed**: 0.3 rad/s
+- **Target Distance**: 0.6m from wall
+- **Maximum Speed**: 0.25 m/s
+- **Control Frequency**: 10Hz
+- **Safety Range**: 0.5m front obstacle detection
 
 ### System Architecture
 - **Robot Platform**: TurtleBot3 Burger
 - **Sensor**: 360° LiDAR
-- **Navigation Stack**: Nav2
-- **Control Algorithm**: Custom obstacle avoidance
+- **Control Algorithm**: PID-based wall following
+- **Safety System**: Front obstacle avoidance
 
 ## 🔧 Customization
 
-Edit `config/nav2_params.yaml`:
+Edit `config/wall_following_params.yaml`:
 ```yaml
-minimum_safe_distance: 0.5    # meters
-minimum_lane_width: 0.8       # meters
-linear_speed: 0.3              # m/s
-angular_speed: 0.3             # rad/s
+target_distance: 0.6           # meters
+max_linear_speed: 0.25         # m/s
+max_angular_speed: 1.0         # rad/s
+safety_distance: 0.5           # meters
+control_frequency: 10          # Hz
 ```
 
 ## 🔍 Debugging
 
 ```bash
 # System monitoring
-ros2 topic list
 ros2 topic hz /scan
-ros2 node info /simple_obstacle_avoider
+ros2 topic hz /cmd_vel
+ros2 node info /wall_follower_controller
 
 # Visualization
-rqt_graph
+rviz2 -d src/wall_following_project/rviz/wall_follower_config.rviz
 ```
 
 ## 🚨 Troubleshooting
 
 ### Common Issues
 
+**Robot Not Following Wall:**
+```bash
+# Check laser scan data
+ros2 topic echo /scan --once
+
+# Verify wall detection
+ros2 node info /wall_follower_controller
+```
+
+**Build Errors:**
+```bash
+# Clean and rebuild
+rm -rf build/ install/ log/
+colcon build --packages-select wall_following_project
+source install/setup.bash
+```
+
 **Gazebo Launch Issues:**
 ```bash
 # Check environment variables
 echo $TURTLEBOT3_MODEL
 source /opt/ros/humble/setup.bash
-```
-
-**Navigation Errors:**
-```bash
-# Verify laser scan topics
-ros2 topic echo /scan
-
-# Check Nav2 services
-ros2 service list | grep nav
 ```
