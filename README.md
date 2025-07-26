@@ -119,6 +119,7 @@ ros2 launch turtlebot3_gazebo turtlebot3_my_world.launch.py
 **Terminal 2 - Launch Obstacle Avoider:**
 ```bash
 cd ~/demo_robotics
+colcon build --packages-select simple_navigation_project
 source install/setup.bash
 ros2 launch simple_navigation_project nav2_simple.launch.py
 ```
