@@ -2,7 +2,7 @@
 
 Autonomous navigation robot using ROS2 and laser-based obstacle detection with intelligent lane selection and path planning.
 
-## 📋 Project Overview
+## 🌟 Project Overview
 
 This project demonstrates autonomous obstacle avoidance capabilities using TurtleBot3 in a Gazebo simulation environment. The system showcases proficiency in:
 
@@ -11,15 +11,15 @@ This project demonstrates autonomous obstacle avoidance capabilities using Turtl
 - **Adaptive Navigation**: Smart path selection based on lane width and safety criteria
 - **Smooth Movement**: Reduced speed settings for stable and controlled navigation
 
-### 🎯 Project Specifications
+## 🎯 Project Specifications
 
 - **Primary Function**: Autonomous obstacle avoidance with intelligent lane selection
 - **Target Application**: Autonomous delivery, indoor navigation, educational robotics
 - **Performance**: Smooth navigation with minimal oscillation and smart path planning
 
-## ⚙️ Technical Features
+## 🚀 Technical Features
 
-### 🔧 Implementation Features
+### ⚡ Implementation Features
 
 1. **Multi-Directional Obstacle Detection**
    - 40° front scanning for forward obstacle detection
@@ -41,7 +41,7 @@ This project demonstrates autonomous obstacle avoidance capabilities using Turtl
    - Multi-point distance analysis for reliable detection
    - Exception handling for sensor data processing
 
-## 📋 System Requirements
+## 💻 System Requirements
 
 - **ROS2 Humble** or higher
 - **Ubuntu 22.04 LTS**
@@ -82,7 +82,7 @@ source ~/.bashrc
 │           └── obstacle_avoider.py    # Main obstacle avoidance logic
 ```
 
-## 🚀 Build Instructions
+## 🔥 Build Instructions
 
 ```bash
 # Create workspace (if not already created)
@@ -133,7 +133,7 @@ The TurtleBot3 will:
 4. **Select Best Path** based on lane width and safety criteria
 5. **Navigate Smoothly** through available passages
 
-## ✅ Verification
+## 💎 Verification
 
 ```bash
 # Check active nodes
@@ -149,7 +149,7 @@ ros2 topic echo /scan
 ros2 node info /simple_obstacle_avoider
 ```
 
-## 📊 Technical Specifications
+## 📡 Technical Specifications
 
 ### Navigation Parameters
 - **Normal Speed**: 0.3 m/s (reduced for smooth operation)
@@ -169,7 +169,7 @@ ros2 node info /simple_obstacle_avoider
 - **Safety Check**: Ensures minimum lane width before turning
 - **Fallback Behavior**: Continues rotating when no safe path is found
 
-## 🔧 Customization
+## 🎨 Customization
 
 Modify parameters in `obstacle_avoider.py`:
 ```python
@@ -198,7 +198,7 @@ ros2 node info /simple_obstacle_avoider
 ros2 topic list
 ```
 
-## 🚨 Troubleshooting
+## 🔧 Troubleshooting
 
 ### Common Issues
 
