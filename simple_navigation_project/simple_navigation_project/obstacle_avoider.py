@@ -35,7 +35,7 @@ class SimpleObstacleAvoider(Node):
         self.right_lane_width = 0.0
         
         # Speed settings - reduced for smoother movement
-        self.normal_speed = 0.3  # Reduced from 0.8 to 0.3
+        self.normal_speed = 0.7  # Increased from 0.3 to 0.7
         self.turn_speed = 0.3    # Smooth turning speed
         
         self.get_logger().info('Simple Obstacle Avoider Started!')
