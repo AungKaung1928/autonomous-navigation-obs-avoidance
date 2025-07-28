@@ -72,11 +72,9 @@ source ~/.bashrc
 ├── src/
 │   └── simple_navigation_project/
 │       ├── package.xml 
-│       ├── setup.py 
-│       ├── config/                   
-│       │   └── nav2_params.yaml       
+│       ├── setup.py      
 │       ├── launch/
-│       │   └── nav2_simple.launch.py 
+│       │   └── nav2_simple.launch.py  # Main launch file
 │       └── simple_navigation_project/
 │           ├── __init__.py
 │           └── obstacle_avoider.py    # Main obstacle avoidance logic
