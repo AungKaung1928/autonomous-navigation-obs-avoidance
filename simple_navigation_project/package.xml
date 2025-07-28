@@ -3,20 +3,20 @@
 <package format="3">
   <name>simple_navigation_project</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Simple obstacle avoidance for TurtleBot3 using laser scan data</description>
   <maintainer email="username@gmail.com">user</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apache-2.0</license>
 
+  <!-- Core ROS2 dependencies -->
   <depend>rclpy</depend>
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
+
+  <!-- Simulation dependencies -->
   <depend>gazebo_ros</depend>
   <depend>turtlebot3_gazebo</depend>
-  <depend>rviz2</depend>
-  <depend>nav2_bringup</depend>
-  <depend>nav2_controller</depend>
-  <depend>nav2_planner</depend>
 
+  <!-- Test dependencies -->
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
