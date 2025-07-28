@@ -152,7 +152,7 @@ ros2 node info /simple_obstacle_avoider
 ## 📡 Technical Specifications
 
 ### Navigation Parameters
-- **Normal Speed**: 0.3 m/s (reduced for smooth operation)
+- **Normal Speed**: 0.7 m/s (increased for faster simulations)
 - **Turn Speed**: 0.3 rad/s
 - **Minimum Safe Distance**: 0.5m from obstacles
 - **Minimum Lane Width**: 0.8m for safe passage
@@ -178,7 +178,7 @@ self.min_distance = 0.5      # Obstacle detection range (meters)
 self.min_lane_width = 0.8    # Minimum safe lane width (meters)
 
 # Speed settings
-self.normal_speed = 0.3      # Forward movement speed (m/s)
+self.normal_speed = 0.7      # Forward movement speed (m/s)
 self.turn_speed = 0.3        # Turning speed (rad/s)
 ```
 
