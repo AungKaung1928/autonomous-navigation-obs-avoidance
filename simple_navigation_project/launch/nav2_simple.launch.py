@@ -20,7 +20,7 @@ def generate_launch_description():
         }.items()
     )
     
-    # Your obstacle avoider node
+    # Obstacle avoider node
     obstacle_avoider = Node(
         package='simple_navigation_project',
         executable='obstacle_avoider',
