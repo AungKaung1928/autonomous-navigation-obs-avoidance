@@ -29,6 +29,7 @@ This project demonstrates autonomous obstacle avoidance capabilities using Turtl
 2. **Intelligent Lane Selection Algorithm**
    - Minimum lane width requirement (0.8m) for safe passage
    - Comparative analysis to choose the wider available lane
+   - Default left turn when both lanes have equal width (prevents robot from getting stuck)
    - Safety-first approach with continuous path evaluation
 
 3. **Adaptive Movement Control**
@@ -126,7 +127,7 @@ ros2 launch simple_navigation_project nav2_simple.launch.py
 
 The TurtleBot3 will:
 1. **Initialize** obstacle detection and lane analysis systems
-2. **Move Forward** when path is clear at 0.3 m/s
+2. **Move Forward** when path is clear at 0.7 m/s
 3. **Analyze Lanes** when obstacle detected in front
 4. **Select Best Path** based on lane width and safety criteria
 5. **Navigate Smoothly** through available passages
@@ -164,6 +165,7 @@ ros2 node info /simple_obstacle_avoider
 
 ### Decision Logic
 - **Path Selection**: Prioritizes wider lanes when both sides are safe
+- **Equal Width Handling**: Defaults to left turn when both lanes have equal width
 - **Safety Check**: Ensures minimum lane width before turning
 - **Fallback Behavior**: Continues rotating when no safe path is found
 
