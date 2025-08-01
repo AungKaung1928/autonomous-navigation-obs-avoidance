@@ -120,5 +120,5 @@ def generate_launch_description():
         delay_slam,
         delay_nav2,
         delay_navigator,
-        rviz,  # Remove this line if you don't want RViz
+        rviz, 
     ])
