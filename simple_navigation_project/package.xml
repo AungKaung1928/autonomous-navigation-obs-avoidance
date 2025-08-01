@@ -2,34 +2,25 @@
 <package format="3">
   <name>simple_navigation_project</name>
   <version>0.0.1</version>
-  <description>Simple Nav2 navigation demo with TurtleBot3</description>
-  <maintainer email="dev@todo.todo">YourName</maintainer>
+  <description>Simple Nav2 navigation demo with TurtleBot3: continuous obstacle-free movement</description>
+
+  <maintainer email="you@example.com">YourName</maintainer>
   <license>Apache-2.0</license>
 
-  <!-- Build dependencies -->
+  <!-- Build tools -->
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>
 
-  <!-- Core ROS2 dependencies -->
+  <!-- Runtime dependencies -->
   <exec_depend>rclpy</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
-  <exec_depend>tf2_ros</exec_depend>
-
-  <!-- Nav2 dependencies -->
   <exec_depend>nav2_simple_commander</exec_depend>
   <exec_depend>nav2_bringup</exec_depend>
-  <exec_depend>nav2_msgs</exec_depend>
-
-  <!-- Launch system dependencies -->
+  <exec_depend>slam_toolbox</exec_depend>
+  <exec_depend>turtlebot3_gazebo</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
-
-  <!-- Simulation dependencies -->
-  <exec_depend>turtlebot3_gazebo</exec_depend>
-  <exec_depend>turtlebot3_description</exec_depend>
-
-  <!-- SLAM dependency -->
-  <exec_depend>slam_toolbox</exec_depend>
 
   <!-- Test dependencies -->
   <test_depend>ament_copyright</test_depend>
