@@ -1,4 +1,6 @@
 from setuptools import setup
+import os
+from glob import glob
 
 package_name = 'simple_navigation_project'
 
@@ -10,14 +12,18 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/nav2_simple.launch.py']),
-        ('share/' + package_name + '/config', ['config/nav2_params.yaml']),
+        # Use glob to automatically find launch files
+        (os.path.join('share', package_name, 'launch'), 
+            glob('launch/*launch.py')),
+        # Use glob to automatically find config files  
+        (os.path.join('share', package_name, 'config'), 
+            glob('config/*.yaml')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='yourname',
-    maintainer_email='you@email.com',
-    description='Simple Nav2 navigation demo',
+    maintainer_email='you@email.com', 
+    description='Simple Nav2 navigation demo with TurtleBot3',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
