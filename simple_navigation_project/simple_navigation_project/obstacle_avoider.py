@@ -7,7 +7,6 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import PoseStamped
 from nav2_simple_commander.robot_navigator import BasicNavigator
-import math
 
 class Nav2ObstacleAvoider(Node):
     def __init__(self):
