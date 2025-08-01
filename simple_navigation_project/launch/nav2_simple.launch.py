@@ -1,34 +1,31 @@
-import os
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
+from launch.actions import ExecuteProcess
 from ament_index_python.packages import get_package_share_directory
+import os
 
 def generate_launch_description():
-    # Get package directories
-    nav2_bringup_dir = get_package_share_directory('nav2_bringup')
-    
-    # Nav2 bringup launch file
-    nav2_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(nav2_bringup_dir, 'launch', 'navigation_launch.py')
-        ),
-        launch_arguments={
-            'use_sim_time': 'true',
-            'autostart': 'true',
-        }.items()
+    # Get the package directory
+    pkg_dir = get_package_share_directory('simple_navigation_project')
+
+    # Start Nav2
+    nav2_bringup_cmd = ExecuteProcess(
+        cmd=['ros2', 'launch', 'nav2_bringup', 'bringup_launch.py',
+             f'map:=',  # no map, use empty world
+             'use_sim_time:=true',
+             'params_file:=' + os.path.join(pkg_dir, 'config', 'nav2_params.yaml')],
+        output='screen'
     )
-    
-    # Obstacle avoider node
-    obstacle_avoider = Node(
+
+    # Start your node
+    avoider_node = Node(
         package='simple_navigation_project',
         executable='obstacle_avoider',
         name='obstacle_avoider',
         output='screen'
     )
-    
+
     return LaunchDescription([
-        nav2_launch,
-        obstacle_avoider
+        nav2_bringup_cmd,
+        avoider_node
     ])
