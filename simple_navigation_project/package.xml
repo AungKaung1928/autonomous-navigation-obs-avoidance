@@ -1,31 +1,21 @@
 <?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>simple_navigation_project</name>
-  <version>0.0.1</version>
-  <description>Simple Nav2 navigation demo with TurtleBot3: continuous obstacle-free movement</description>
+  <name>nav2_obstacle_avoidance</name>
+  <version>1.0.0</version>
+  <description>Simple Nav2 obstacle avoidance for TurtleBot3</description>
+  <maintainer email="user@example.com">User</maintainer>
+  <license>MIT</license>
 
-  <maintainer email="you@example.com">YourName</maintainer>
-  <license>Apache-2.0</license>
+  <depend>rclpy</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav2_simple_commander</depend>
+  <depend>tf_transformations</depend>
 
-  <!-- Build tools -->
-  <buildtool_depend>ament_cmake</buildtool_depend>
-  <buildtool_depend>ament_cmake_python</buildtool_depend>
-
-  <!-- Runtime dependencies -->
-  <exec_depend>rclpy</exec_depend>
-  <exec_depend>geometry_msgs</exec_depend>
-  <exec_depend>nav2_simple_commander</exec_depend>
-  <exec_depend>nav2_bringup</exec_depend>
-  <exec_depend>slam_toolbox</exec_depend>
-  <exec_depend>turtlebot3_gazebo</exec_depend>
-  <exec_depend>tf2_ros</exec_depend>
-  <exec_depend>launch</exec_depend>
-  <exec_depend>launch_ros</exec_depend>
-
-  <!-- Test dependencies -->
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
-  <test_depend>ament_pep8</test_depend>
+  <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
 
   <export>
