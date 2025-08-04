@@ -1,26 +1,30 @@
 from setuptools import setup
+import os
+from glob import glob
 
 package_name = 'simple_navigation_project'
 
 setup(
     name=package_name,
-    version='1.0.0',
+    version='0.0.0',
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
+        (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='User',
+    maintainer='user',
     maintainer_email='user@example.com',
-    description='Simple Nav2 obstacle avoidance for TurtleBot3',
-    license='MIT',
+    description='Simple Navigation 2 project',
+    license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'obstacle_avoider = simple_navigation_project.obstacle_avoider:main'
+            'waypoint_navigator = simple_navigation_project.waypoint_navigator:main',
         ],
     },
 )
