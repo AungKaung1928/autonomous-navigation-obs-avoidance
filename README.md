@@ -1,79 +1,35 @@
 # 🤖 TurtleBot3 Simple Navigation Project
 
-Autonomous navigation robot using ROS2 Navigation 2 stack with laser-based obstacle detection and intelligent waypoint navigation.
+Autonomous navigation robot using ROS2 Navigation 2 stack with waypoint-based obstacle avoidance navigation.
 
 ## 🌟 Project Overview
 
-This project demonstrates autonomous navigation capabilities using TurtleBot3 in a Gazebo simulation environment with ROS2 Navigation 2 (Nav2). The system showcases proficiency in:
+This project demonstrates autonomous navigation using TurtleBot3 in Gazebo with ROS2 Navigation 2 (Nav2). The robot follows predefined waypoints while automatically avoiding obstacles using Nav2's built-in planning algorithms.
 
-- **Nav2 Integration**: Leverages the powerful Navigation 2 stack for robust path planning
-- **Obstacle Detection**: Real-time front area obstacle detection using laser scan
-- **Waypoint Navigation**: Intelligent navigation through predefined waypoints
-- **Automatic Replanning**: Nav2 handles dynamic obstacle avoidance and path replanning
-- **Continuous Exploration**: Robot keeps moving and exploring after completing waypoints
+### 🎯 Key Features
+- **Nav2 Integration**: Uses `nav2_simple_commander` for professional navigation
+- **Waypoint Navigation**: Follows predefined waypoints with automatic path planning
+- **Obstacle Avoidance**: Nav2 handles collision avoidance automatically
+- **Continuous Movement**: Robot moves without colliding with obstacles
 
-## 🎯 Project Specifications
-
-- **Primary Function**: Autonomous navigation using Nav2 with obstacle avoidance
-- **Target Application**: Autonomous delivery, indoor navigation, educational robotics
-- **Performance**: Robust navigation with Nav2's advanced path planning algorithms
-
-## 🚀 Technical Features
-
-### ⚡ Implementation Features
-
-1. **Nav2 Integration**
-   - Uses `nav2_simple_commander` for easy navigation control
-   - Leverages Nav2's built-in obstacle avoidance capabilities
-   - Automatic path replanning when obstacles are detected
-   - Professional-grade navigation stack
-
-2. **Smart Obstacle Detection**
-   - 60° front scanning for forward obstacle detection
-   - Real-time laser scan monitoring
-   - Maintains 0.6m minimum safe distance from obstacles
-   - Integrates seamlessly with Nav2's planning algorithms
-
-3. **Intelligent Waypoint System**
-   - Predefined waypoint sequence for structured navigation
-   - Random waypoint generation for continuous exploration
-   - Goal completion tracking and automatic progression
-   - Robust error handling and recovery
-
-4. **Robust Navigation Control**
-   - Nav2 handles complex path planning and obstacle avoidance
-   - Automatic replanning when blocked paths are detected
-   - Continuous movement with fallback to random exploration
-   - Professional navigation behavior
-
-## 💻 System Requirements
-
-- **ROS2 Foxy** or higher (Humble recommended)
-- **Ubuntu 20.04 LTS** (Foxy) or **Ubuntu 22.04 LTS** (Humble)
+### 💻 System Requirements
+- **ROS2 Humble** or higher
+- **Ubuntu 22.04 LTS**
 - **Gazebo Classic**
 - **Python 3.8+**
-- **TurtleBot3 packages**
-- **Navigation 2 stack**
 
-## 🛠️ Installation
+## 🛠️ Installation & Setup
 
 ### Prerequisites
 ```bash
-# Install ROS2 and dependencies
+# Install dependencies
 sudo apt update
-sudo apt install ros-$ROS_DISTRO-desktop-full
-sudo apt install ros-$ROS_DISTRO-turtlebot3*
-sudo apt install ros-$ROS_DISTRO-nav2-bringup
-sudo apt install ros-$ROS_DISTRO-nav2-simple-commander
+sudo apt install ros-humble-nav2-bringup ros-humble-nav2-simple-commander
+sudo apt install ros-humble-turtlebot3-gazebo ros-humble-turtlebot3-cartographer
+sudo apt install python3-tf-transformations
 
-# Install tf_transformations
-pip3 install transforms3d
-```
-
-### Environment Setup
-```bash
-echo "export TURTLEBOT3_MODEL=waffle" >> ~/.bashrc
-echo "export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/$ROS_DISTRO/share/turtlebot3_gazebo/models" >> ~/.bashrc
+# Set TurtleBot3 model
+echo "export TURTLEBOT3_MODEL=waffle_pi" >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -85,197 +41,128 @@ source ~/.bashrc
 │   └── simple_navigation_project/
 │       ├── package.xml 
 │       ├── setup.py      
+│       ├── config/
+│       │   └── nav2_params.yaml       # Navigation 2 parameters
 │       ├── launch/
 │       │   └── nav2_simple.launch.py  # Main launch file
 │       └── simple_navigation_project/
 │           ├── __init__.py
-│           └── obstacle_avoider.py    # Main navigation logic with Nav2
+│           └── waypoint_navigator.py  # Nav2 waypoint navigation
 ```
 
 ## 🔥 Build Instructions
 
+### Step 1: Create Project Structure
 ```bash
-# Create workspace (if not already created)
+# Create workspace
 mkdir -p ~/demo_robotics/src
 cd ~/demo_robotics/src
 
-# Copy project files to simple_navigation_project/
-# Make sure __init__.py exists in simple_navigation_project/simple_navigation_project/
-touch simple_navigation_project/simple_navigation_project/__init__.py
+# Create ROS2 package
+ros2 pkg create --build-type ament_python simple_navigation_project
 
-# Navigate to workspace and build
+# Create directories and files
+cd simple_navigation_project
+mkdir config launch
+touch config/nav2_params.yaml
+touch launch/nav2_simple.launch.py
+touch simple_navigation_project/waypoint_navigator.py
+```
+
+### Step 2: Build Project
+```bash
+# Navigate to workspace
 cd ~/demo_robotics
+
+# Build package
 colcon build --packages-select simple_navigation_project
+
+# Source workspace
 source install/setup.bash
 ```
 
 ## 🎮 Operation Instructions
 
-### Method 1: Using Launch File (Recommended)
-
-**Single Terminal - Launch Everything:**
+### Method 1: All-in-One Launch (Recommended)
 ```bash
 cd ~/demo_robotics
 source install/setup.bash
 ros2 launch simple_navigation_project nav2_simple.launch.py
 ```
 
-### Method 2: Manual Launch (Step by Step)
-
-**Terminal 1 - Launch Gazebo Environment:**
+### Method 2: Step-by-Step Launch
 ```bash
-export TURTLEBOT3_MODEL=waffle
+# Terminal 1: Launch Gazebo + TurtleBot3
+export TURTLEBOT3_MODEL=waffle_pi
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
-```
 
-**Terminal 2 - Launch Nav2:**
-```bash
-ros2 launch nav2_bringup tb3_simulation_launch.py headless:=False
-```
+# Terminal 2: Launch Navigation 2
+ros2 launch nav2_bringup bringup_launch.py use_sim_time:=True map:=/opt/ros/humble/share/turtlebot3_navigation2/map/map.yaml
 
-**Terminal 3 - Launch Navigation Node:**
-```bash
+# Terminal 3: Launch waypoint navigator
 cd ~/demo_robotics
 source install/setup.bash
-ros2 run simple_navigation_project obstacle_avoider
+ros2 run simple_navigation_project waypoint_navigator
+
+# Terminal 4: RViz visualization (optional)
+rviz2 -d /opt/ros/humble/share/nav2_bringup/rviz/nav2_default_view.rviz
 ```
 
-### Expected Behavior
+## 📡 Navigation 2 Concepts
 
-The TurtleBot3 will:
-1. **Initialize** Nav2 and wait for activation
-2. **Set Initial Pose** and start navigation system
-3. **Navigate Waypoints** through predefined sequence
-4. **Detect Obstacles** using laser scan in real-time
-5. **Auto-Replan Paths** when Nav2 detects obstacles
-6. **Explore Randomly** after completing all waypoints
-7. **Continue Moving** indefinitely with intelligent navigation
+### 🧠 Core Nav2 Features Demonstrated
+1. **BasicNavigator**: Simple interface for Nav2 commands
+2. **Waypoint Following**: Robot navigates through predefined points
+3. **Automatic Obstacle Avoidance**: Nav2 handles collision avoidance
+4. **Path Planning**: Global and local path planning algorithms
+5. **Localization**: AMCL for robot pose estimation
+6. **Recovery Behaviors**: Automatic recovery when blocked
 
-## 💎 Verification
+### 🎯 How It Works
+1. **Initialize**: Set robot's initial pose and wait for Nav2
+2. **Create Waypoints**: Define target poses with coordinates
+3. **Navigate**: Nav2 plans paths and avoids obstacles automatically
+4. **Monitor**: Track progress and handle completion
+
+### 📍 Waypoint Sequence
+The robot follows these waypoints:
+- **(2.0, 0.0, 0°)** → Move forward
+- **(2.0, 1.0, 90°)** → Turn left  
+- **(0.0, 1.0, 180°)** → Move back
+- **(-0.0, -1.0, -90°)** → Turn right
+- **(1.0, -1.0, 0°)** → Complete loop
+
+## 💎 Verification & Testing
 
 ```bash
-# Check active nodes (should see Nav2 and our node)
+# Check active nodes
 ros2 node list
 
 # Monitor navigation goals
-ros2 topic echo /goal_pose
+ros2 topic echo /navigate_to_pose/_action/goal
 
-# Check laser scan data
-ros2 topic echo /scan
-
-# View navigation logs
-ros2 node info /simple_obstacle_avoider
-
-# Check Nav2 status
-ros2 topic list | grep nav2
-```
-
-## 📡 Technical Specifications
-
-### Navigation Parameters
-- **Minimum Safe Distance**: 0.6m from obstacles
-- **Front Detection Area**: 60° arc (330°-30°)
-- **Waypoint System**: 5 predefined + infinite random waypoints
-- **Control Frequency**: 10Hz (0.1s spin rate)
-
-### Nav2 Configuration
-- **Path Planning**: Uses Nav2's built-in planners
-- **Obstacle Avoidance**: Nav2's dynamic obstacle avoidance
-- **Recovery Behaviors**: Automatic recovery when stuck
-- **Replanning**: Real-time path replanning on obstacle detection
-
-### Waypoint Sequence
-1. **(2.0, 0.0, 0°)** - Move right
-2. **(2.0, 2.0, 90°)** - Move up
-3. **(0.0, 2.0, 180°)** - Move to center-top
-4. **(-2.0, 0.0, -90°)** - Move left
-5. **(0.0, 0.0, 0°)** - Return to origin
-6. **Random exploration** continues...
-
-## 🎨 Customization
-
-Modify parameters in `obstacle_avoider.py`:
-```python
-# Obstacle detection
-self.min_distance = 0.6      # Safe distance from obstacles (meters)
-
-# Waypoint bounds for random generation
-x = random.uniform(-3.0, 3.0)  # X-axis exploration range
-y = random.uniform(-3.0, 3.0)  # Y-axis exploration range
-
-# Front detection area
-front_ranges = ranges[330:360] + ranges[0:30]  # 60° front area
-```
-
-## 🔍 Debugging and Monitoring
-
-```bash
-# Monitor Nav2 status
-ros2 topic echo /behavior_tree_log
-
-# Check navigation feedback
+# Check waypoint progress
 ros2 topic echo /navigate_to_pose/_action/feedback
 
-# Real-time laser data monitoring
-ros2 topic echo /scan --once
-
-# Check map and localization
-ros2 topic echo /map
-ros2 topic echo /amcl_pose
-
-# View all Nav2 topics
-ros2 topic list | grep -E "(nav2|navigate|goal|path)"
+# View Nav2 status
+ros2 service call /is_navigator_ready std_srvs/srv/Empty
 ```
 
 ## 🔧 Troubleshooting
 
-### Common Issues
-
 **Nav2 Not Ready:**
-```bash
-# Check if all Nav2 nodes are running
-ros2 node list | grep nav2
-
-# Wait longer for Nav2 initialization
-# The node will log "Waiting for Nav2 to activate..."
-```
+- Wait for "Nav2 is ready!" message in terminal
+- Check all Nav2 nodes are running: `ros2 node list | grep nav2`
 
 **Robot Not Moving:**
-```bash
-# Check if navigation goals are being sent
-ros2 topic hz /goal_pose
-
-# Verify Nav2 is publishing cmd_vel
-ros2 topic hz /cmd_vel
-
-# Check node status
-ros2 node list | grep obstacle
-```
-
-**TurtleBot3 Model Issues:**
-```bash
-# Ensure correct model is set
-export TURTLEBOT3_MODEL=waffle
-export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/$ROS_DISTRO/share/turtlebot3_gazebo/models
-```
+- Verify TurtleBot3 model: `echo $TURTLEBOT3_MODEL`
+- Check navigation feedback: `ros2 topic hz /navigate_to_pose/_action/feedback`
 
 **Build Errors:**
 ```bash
-# Install missing dependencies
-sudo apt install python3-transforms3d-pip
-pip3 install transforms3d
-
-# Clean workspace and rebuild
+# Clean and rebuild
 cd ~/demo_robotics
 rm -rf build/ install/ log/
-colcon build --packages-select simple_navigation_project
-source install/setup.bash
-```
-
-**Launch File Not Found:**
-```bash
-# Make sure package is built and sourced
-cd ~/demo_robotics
 colcon build --packages-select simple_navigation_project
 source install/setup.bash
 ```
