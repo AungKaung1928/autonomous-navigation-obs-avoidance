@@ -5,33 +5,42 @@ from launch_ros.actions import Node
 from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
-    # Parameters
-    speed = LaunchConfiguration('normal_speed', default='0.2')
-    turn = LaunchConfiguration('turn_speed', default='0.5')
-    dist = LaunchConfiguration('min_distance', default='0.5')
+    # Parameters with default values
+    speed = LaunchConfiguration('normal_speed')
+    turn = LaunchConfiguration('turn_speed') 
+    dist = LaunchConfiguration('min_distance')
     
     return LaunchDescription([
-        # Declare arguments
-        DeclareLaunchArgument('normal_speed', default_value='0.2', description='Forward speed (m/s)'),
-        DeclareLaunchArgument('turn_speed', default_value='0.5', description='Turn speed (rad/s)'),
-        DeclareLaunchArgument('min_distance', default_value='0.5', description='Min obstacle distance (m)'),
-        
-        # Static TF for Nav2
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom']
+        # Declare arguments with default values
+        DeclareLaunchArgument(
+            'normal_speed', 
+            default_value='0.2', 
+            description='Forward speed (m/s) - Range: 0.1 to 0.5'
+        ),
+        DeclareLaunchArgument(
+            'turn_speed', 
+            default_value='0.5', 
+            description='Turn speed (rad/s) - Range: 0.3 to 1.5'
+        ),
+        DeclareLaunchArgument(
+            'min_distance', 
+            default_value='0.5', 
+            description='Min obstacle distance (m) - Range: 0.3 to 1.0'
         ),
         
-        # Main node with parameters
+        # Main obstacle avoider node
         Node(
             package='simple_navigation_project',
             executable='obstacle_avoider',
+            name='obstacle_avoider',
             output='screen',
             parameters=[{
                 'normal_speed': speed,
                 'turn_speed': turn,
                 'min_distance': dist
-            }]
+            }],
+            remappings=[
+                ('/cmd_vel', '/cmd_vel')
+            ]
         )
     ])
