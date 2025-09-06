@@ -1,6 +1,6 @@
 # Simple Navigation Project
 
-A ROS 2 robotics package providing autonomous navigation capabilities with obstacle avoidance and goal-based navigation using Nav2.
+A simple ROS 2 robotics package providing autonomous navigation capabilities with obstacle avoidance and goal-based navigation using Nav2.
 
 ## 📦 Package Contents
 
