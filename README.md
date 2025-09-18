@@ -72,7 +72,7 @@ colcon build --packages-select simple_navigation_project
 source install/setup.bash
 ```
 
-## 🏃 Usage
+## 🥇 Usage
 
 ### Simple Obstacle Avoidance
 
