@@ -2,7 +2,7 @@
 
 A simple ROS 2 robotics package providing autonomous navigation capabilities with obstacle avoidance and goal-based navigation using Nav2.
 
-## 📦 Package Contents
+##  Package Contents
 
 ### Folder Structure
 
@@ -55,7 +55,7 @@ simple_navigation_project/
 - **Costmap Management**: Local and global costmaps for obstacle representation
 - **Multiple Planners**: NavFn planner with A* support
 
-## 🛠️ Installation
+##  Installation
 
 ```bash
 # Navigate to your ROS 2 workspace
@@ -72,7 +72,7 @@ colcon build --packages-select simple_navigation_project
 source install/setup.bash
 ```
 
-## 🥇 Usage
+##  Usage
 
 ### Simple Obstacle Avoidance
 
@@ -189,7 +189,7 @@ The `nav2_params.yaml` file configures:
 - **Graceful Shutdown**: Sends stop command before node termination
 - **Error Handling**: Robust error handling for sensor failures
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 **No laser data received:**
 - Verify laser scanner is publishing to `/scan` topic
