@@ -40,7 +40,7 @@ simple_navigation_project/
 - **`nav2_bringup.launch.py`** - Full navigation stack launcher
 - **`nav2_simple.launch.py`** - Simple obstacle avoidance launcher
 
-## 🚀 Features
+##  Features
 
 ### Obstacle Avoidance
 - **Reactive Navigation**: Real-time obstacle detection and avoidance
@@ -112,7 +112,7 @@ Start autonomous exploration with random goals:
 ros2 run simple_navigation_project simple_navigator
 ```
 
-## 🔧 Node Details
+##  Node Details
 
 ### SimpleObstacleAvoider
 
@@ -146,7 +146,7 @@ ros2 run simple_navigation_project simple_navigator
 - Random orientation: ±π radians
 - Publishes in `map` frame for Nav2 compatibility
 
-## 📋 Requirements
+##  Requirements
 
 ### ROS 2 Dependencies
 - `rclpy`: ROS 2 Python client library
