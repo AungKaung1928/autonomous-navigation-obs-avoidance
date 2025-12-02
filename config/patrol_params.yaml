@@ -1,0 +1,13 @@
+patrol_controller:
+  ros__parameters:
+    patrol_speed: 0.2
+    turn_speed: 0.5
+    safe_distance: 0.8
+    min_lane_width: 0.8
+```
+
+---
+
+### **File:** `resource/simple_navigation_project`
+```
+# Empty marker file - required by ament_python
