@@ -124,7 +124,7 @@ class PatrolController(LifecycleNode):
         return TransitionCallbackReturn.SUCCESS
     
     def _laser_callback(self, msg):
-        """Process laser scan - match C++ logic exactly"""
+        """Process laser scan"""
         self.latest_scan = msg
         
         ranges = msg.ranges
