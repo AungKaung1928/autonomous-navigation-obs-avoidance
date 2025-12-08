@@ -1,4 +1,4 @@
-# Test edit
+# Test Edit 3
 # Simple Autonomous Patrol Robot
 
 Production-grade ROS2 robot that autonomously navigates environments with intelligent obstacle avoidance and narrow space detection.
@@ -203,4 +203,5 @@ Apache-2.0
 ---
 
 **TL;DR**: Launch with `ros2 launch simple_navigation_project patrol_robot.launch.py`. Add `patrol_speed:=0.3` to change speed. Robot avoids obstacles at 0.8m, won't enter narrow gaps, never gets stuck.
+
 
