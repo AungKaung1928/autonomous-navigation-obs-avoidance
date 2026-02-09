@@ -196,12 +196,8 @@ simple_navigation_project/
 ```
 
 ## License
+Apache License 2.0 - See [LICENSE](LICENSE) for details.
 
-Apache-2.0
-
+This project demonstrates production-grade ROS2 obstacle avoidance with lifecycle management.
+Free to use for commercial and educational purposes.
 ---
-
-**TL;DR**: Launch with `ros2 launch simple_navigation_project patrol_robot.launch.py`. Add `patrol_speed:=0.3` to change speed. Robot avoids obstacles at 0.8m, won't enter narrow gaps, never gets stuck.
-
-
-
