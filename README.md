@@ -1,6 +1,10 @@
 # Simple Autonomous Patrol Robot
 
-Production-grade ROS2 robot that autonomously navigates environments with intelligent obstacle avoidance and narrow space detection.
+ROS 2 Humble LifecycleNode that wanders a TurtleBot3 through Gazebo Harmonic: drive while the
+front sector is clear, otherwise stop and turn toward the wider clear lane, refusing gaps
+narrower than `min_lane_width`. Reactive, map-free, 10 Hz.
+
+Stack: ROS 2 Humble · Gazebo Harmonic (gz-sim 8) via `ros-humble-ros-gzharmonic` · Python.
 
 ## Features
 
@@ -12,31 +16,47 @@ Production-grade ROS2 robot that autonomously navigates environments with intell
 
 ## Quick Start
 
-### Installation
-
 ```bash
-cd ~/simple_nav_ws/src/simple_navigation_project
-touch resource/simple_navigation_project
+sudo apt install gz-harmonic ros-humble-ros-gzharmonic ros-humble-turtlebot3-description \
+                 ros-humble-xacro ros-humble-robot-state-publisher
+mkdir -p ~/patrol_ws/src && cd ~/patrol_ws/src
+git clone https://github.com/AungKaung1928/autonomous-navigation-obs-avoidance.git
+cd .. && colcon build --symlink-install && source install/setup.bash
 
-cd ~/simple_nav_ws
-colcon build --packages-select simple_navigation_project
-source install/setup.bash
+pkill -9 -f "gz sim"      # stale gz servers share the bus and corrupt /clock and /odom
+ros2 launch simple_navigation_project patrol_gazebo.launch.py
 ```
+`patrol_gazebo.launch.py` starts Gazebo Harmonic with `worlds/turtlebot3_world.sdf` (hexagon +
+9 pillars), spawns the burger from `description/turtlebot3_burger.urdf.xacro`, bridges
+`/scan /cmd_vel /odom /tf /clock` with `config/gz_bridge.yaml`, and starts the controller.
+Arguments: `world`, `headless:=true`, `x_pose y_pose yaw`, `params_file`. A 6 x 6 m room with
+a partition is available as `world:=.../worlds/wall_follow_world.sdf`.
 
-### Run with TurtleBot3 Simulation
-
-**Terminal 1 - Launch Gazebo:**
+Controller only (a simulator or robot already publishes `/scan`):
 ```bash
-export TURTLEBOT3_MODEL=burger
-ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
-```
-
-**Terminal 2 - Start Patrol:**
-```bash
-cd ~/simple_nav_ws
-source install/setup.bash
 ros2 launch simple_navigation_project patrol_robot.launch.py
 ```
+
+## Measured (Gazebo Harmonic, headless, 120 s, turtlebot3_world, spawn (-2.0, -0.5))
+Independent 10 Hz recorder on `/odom` and `/scan`:
+
+| Metric | Value |
+|---|---|
+| Path length | 19.3 m |
+| Longest stall (net move < 5 cm) | 2.9 s |
+| Closest scan return | 0.31 m (no contact; contact = < 0.16 m) |
+| Decisions logged | 62 forward · 23 turn · 22 rotate-for-opening · 6 lane-too-narrow |
+
+The trajectory circulates the whole arena (every 10 s sample lands in a different sector).
+
+## What was fixed (2026-09-05)
+- Scan sectors were hard-coded index ranges assuming the Classic LDS convention (index 0 =
+  front, one index per degree). Under Harmonic's gpu_lidar `angle_min = -pi`, so "front" read the
+  rear and left/right swapped. Sectors are now derived from `angle_min` / `angle_increment`.
+- `config/patrol_params.yaml` contained pasted Markdown after line 5 and could not be parsed;
+  the node died at start-up whenever the file was used.
+- `/scan` subscription is BEST_EFFORT (sensor QoS), matching both the bridge and the real LDS.
+- Shutdown deactivates and stops the robot while the rclpy context is still valid.
 
 ## Parameter Tuning
 
@@ -157,10 +177,9 @@ ros2 launch simple_navigation_project patrol_robot.launch.py \
 ros2 launch simple_navigation_project patrol_robot.launch.py min_lane_width:=1.0
 ```
 
-**Gazebo crashes on startup:**
+**Gazebo shows no robot or /clock jumps:**
 ```bash
-killall -9 gzserver gzclient
-rm -rf /tmp/.gazebo-*
+pkill -9 -f "gz sim"   # a stale server from a previous run is still on the gz bus
 ```
 
 ## Make Changes Permanent

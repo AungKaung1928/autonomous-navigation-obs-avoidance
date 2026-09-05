@@ -4,11 +4,14 @@ Simple autonomous patrol with obstacle avoidance.
 Using Lifecycle Node for production deployment.
 """
 
+import math
+
 import rclpy
 from rclpy.lifecycle import LifecycleNode, LifecycleState, TransitionCallbackReturn
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy
+from rclpy.signals import SignalHandlerOptions
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
-import math
 
 
 class PatrolController(LifecycleNode):
@@ -49,8 +52,10 @@ class PatrolController(LifecycleNode):
         try:
             # Create publishers and subscribers
             self.cmd_vel_pub = self.create_lifecycle_publisher(Twist, '/cmd_vel', 10)
+            # BEST_EFFORT matches both the sim bridge and the real LDS driver.
+            sensor_qos = QoSProfile(depth=1, reliability=QoSReliabilityPolicy.BEST_EFFORT)
             self.laser_sub = self.create_subscription(
-                LaserScan, '/scan', self._laser_callback, 10
+                LaserScan, '/scan', self._laser_callback, sensor_qos
             )
             
             self.get_logger().info('✅ Configuration complete')
@@ -123,72 +128,45 @@ class PatrolController(LifecycleNode):
         self._send_stop_command()
         return TransitionCallbackReturn.SUCCESS
     
+    def _sector_min(self, msg, lo_deg: float, hi_deg: float) -> float:
+        """Minimum valid range over a bearing sector in the robot frame (0 = front, +90 = left).
+
+        Indices are derived from angle_min / angle_increment, so this works for both the
+        Classic LDS convention (angle_min = 0) and gpu_lidar (angle_min = -pi).
+        """
+        n = len(msg.ranges)
+        two_pi = 2.0 * math.pi
+        start = (math.radians(lo_deg) - msg.angle_min) % two_pi
+        count = int(round(math.radians(hi_deg - lo_deg) / msg.angle_increment))
+        first = int(round(start / msg.angle_increment))
+        best = math.inf
+        for k in range(count + 1):
+            r = msg.ranges[(first + k) % n]
+            if math.isfinite(r) and msg.range_min < r < msg.range_max:
+                best = min(best, r)
+        return best
+
     def _laser_callback(self, msg):
-        """Process laser scan logic"""
+        """Reduce the scan to front / side clearances and side lane widths."""
         self.latest_scan = msg
-        
-        ranges = msg.ranges
-        total = len(ranges)
-        
-        if total == 0:
+        if not msg.ranges or msg.angle_increment == 0.0:
             return
-        
-        # Filter valid ranges
-        def get_valid_ranges(indices):
-            valid = []
-            for i in indices:
-                if 0 <= i < total:
-                    r = ranges[i]
-                    if math.isfinite(r) and 0.1 < r < 10.0:
-                        valid.append(r)
-            return valid
-        
-        # Front sector: 340-360 and 0-20 degrees (±20 degrees from center)
-        front_indices = list(range(340, 360)) + list(range(0, 20))
-        front_distances = get_valid_ranges(front_indices)
-        
-        # Left sector: 60-120 degrees
-        left_indices = list(range(60, 120))
-        left_distances = get_valid_ranges(left_indices)
-        
-        # Right sector: 240-300 degrees
-        right_indices = list(range(240, 300))
-        right_distances = get_valid_ranges(right_indices)
-        
-        # Wide left for lane width: 45-135 degrees
-        left_wide_indices = list(range(45, 135))
-        left_wide_distances = get_valid_ranges(left_wide_indices)
-        
-        # Wide right for lane width: 225-315 degrees
-        right_wide_indices = list(range(225, 315))
-        right_wide_distances = get_valid_ranges(right_wide_indices)
-        
-        # Check if paths are clear
-        self.front_clear = (
-            len(front_distances) == 0 or 
-            min(front_distances) > self.safe_distance
-        )
-        self.left_clear = (
-            len(left_distances) == 0 or 
-            min(left_distances) > self.safe_distance
-        )
-        self.right_clear = (
-            len(right_distances) == 0 or 
-            min(right_distances) > self.safe_distance
-        )
-        
-        # Measure lane widths
-        self.left_lane_width = (
-            0.0 if len(left_wide_distances) == 0 
-            else min(left_wide_distances)
-        )
-        self.right_lane_width = (
-            0.0 if len(right_wide_distances) == 0 
-            else min(right_wide_distances)
-        )
-    
+
+        front = self._sector_min(msg, -20.0, 20.0)
+        left = self._sector_min(msg, 60.0, 120.0)
+        right = self._sector_min(msg, -120.0, -60.0)
+        left_wide = self._sector_min(msg, 45.0, 135.0)
+        right_wide = self._sector_min(msg, -135.0, -45.0)
+
+        # inf (no return in the sector) counts as clear / unbounded lane
+        self.front_clear = front > self.safe_distance
+        self.left_clear = left > self.safe_distance
+        self.right_clear = right > self.safe_distance
+        self.left_lane_width = left_wide if math.isfinite(left_wide) else msg.range_max
+        self.right_lane_width = right_wide if math.isfinite(right_wide) else msg.range_max
+
     def _move_robot(self):
-        """Move robot - match C++ logic exactly"""
+        """10 Hz reactive step: forward if clear, else stop and turn toward the wider safe lane."""
         if self.latest_scan is None:
             return
         
@@ -257,15 +235,14 @@ class PatrolController(LifecycleNode):
     
     def _send_stop_command(self):
         """Stop robot safely"""
-        try:
-            cmd = Twist()
-            self.cmd_vel_pub.publish(cmd)
-        except:
-            pass
+        if self.cmd_vel_pub is not None and self.cmd_vel_pub.is_activated and rclpy.ok():
+            self.cmd_vel_pub.publish(Twist())
 
 
 def main(args=None):
-    rclpy.init(args=args)
+    # Keep the context alive through SIGINT so the lifecycle deactivate/stop below can
+    # still publish; rclpy's own handler would invalidate it first.
+    rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
     
     node = PatrolController()
     executor = rclpy.executors.SingleThreadedExecutor()
@@ -289,7 +266,7 @@ def main(args=None):
         node.trigger_cleanup()
         node.trigger_shutdown()
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()
 
 
 if __name__ == '__main__':

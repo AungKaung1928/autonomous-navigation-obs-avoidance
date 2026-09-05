@@ -4,7 +4,7 @@
   <name>simple_navigation_project</name>
   <version>1.0.0</version>
   <description>Production-grade autonomous patrol robot with obstacle avoidance</description>
-  <maintainer email="your_email@example.com">Your Name</maintainer>
+  <maintainer email="103877301+AungKaung1928@users.noreply.github.com">Aung Kaung Myat</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_python</buildtool_depend>
@@ -18,6 +18,12 @@
   <!-- Lifecycle dependencies -->
   <depend>rclpy_lifecycle</depend>
   <depend>lifecycle_msgs</depend>
+
+  <exec_depend>ros_gz_sim</exec_depend>
+  <exec_depend>ros_gz_bridge</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>turtlebot3_description</exec_depend>
 
   <!-- Testing -->
   <test_depend>ament_copyright</test_depend>

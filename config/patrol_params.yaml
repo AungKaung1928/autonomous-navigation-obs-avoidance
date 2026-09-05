@@ -1,13 +1,7 @@
 patrol_controller:
   ros__parameters:
-    patrol_speed: 0.2
-    turn_speed: 0.5
-    safe_distance: 0.8
-    min_lane_width: 0.8
-```
-
----
-
-### **File:** `resource/simple_navigation_project`
-```
-# Empty marker file - required by ament_python
+    use_sim_time: true
+    patrol_speed: 0.2        # forward speed when the front sector is clear (m/s)
+    turn_speed: 0.5          # in-place rotation speed while choosing a lane (rad/s)
+    safe_distance: 0.8       # front / side sector minimum range that counts as clear (m)
+    min_lane_width: 0.8      # side lane must be at least this wide to be entered (m)
