@@ -30,6 +30,8 @@ Controller only (a simulator or robot already publishes `/scan`):
 ros2 launch simple_navigation_project patrol_robot.launch.py
 ```
 
+Without Gazebo: `cd src/simple_navigation_project && launch_test test/test_launch_scenes.py` (after `source install/setup.bash`) starts the installed node with the shipped parameters, feeds it synthetic scans and checks `/cmd_vel`: forward at 0.2 m/s when clear, a turn toward the open side when blocked ahead, then a clean exit. CI runs it in `ros:humble` on every push.
+
 ## Measured (Gazebo Harmonic, headless, 120 s, turtlebot3_world, spawn (-2.0, -0.5))
 Independent 10 Hz recorder on `/odom` and `/scan`:
 
