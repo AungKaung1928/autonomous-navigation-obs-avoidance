@@ -7,7 +7,6 @@
   <maintainer email="dev@example.com">Developer</maintainer>
   <license>Apache-2.0</license>
 
-  <buildtool_depend>ament_python</buildtool_depend>
 
   <!-- Core dependencies -->
   <depend>rclpy</depend>
@@ -16,7 +15,6 @@
   <depend>std_msgs</depend>
   
   <!-- Lifecycle dependencies -->
-  <depend>rclpy_lifecycle</depend>
   <depend>lifecycle_msgs</depend>
 
   <exec_depend>ros_gz_sim</exec_depend>
