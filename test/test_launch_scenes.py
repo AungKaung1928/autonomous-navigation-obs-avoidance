@@ -91,9 +91,19 @@ class TestScenes(unittest.TestCase):
 
     def test_scene_sequence(self):
         # Shipped params: patrol_speed 0.2 m/s, turn_speed 0.5 rad/s.
-        self.drive(OPEN, lambda c: c.linear.x == 0.2 and c.angular.z == 0.0, timeout=20.0)
-        self.drive(AHEAD_AND_LEFT, lambda c: c.linear.x == 0.0 and c.angular.z == -0.5)
-        self.drive(AHEAD_AND_RIGHT, lambda c: c.linear.x == 0.0 and c.angular.z == 0.5)
+        seen = []
+        for name, scan, expect, timeout in [
+                ('open', OPEN, lambda c: c.linear.x == 0.2 and c.angular.z == 0.0, 20.0),
+                ('ahead + left', AHEAD_AND_LEFT, lambda c: c.linear.x == 0.0 and c.angular.z == -0.5, 10.0),
+                ('ahead + right', AHEAD_AND_RIGHT, lambda c: c.linear.x == 0.0 and c.angular.z == 0.5, 10.0)]:
+            self.drive(scan, expect, timeout=timeout)
+            seen.append((name, scan, self.cmds[-1]))
+        out = os.environ.get('SCENE_CSV')  # optional, for scripts/plot_scenes.py
+        if out:
+            with open(out, 'w') as f:
+                f.write('scene,v,w,ranges\n')
+                for name, scan, c in seen:
+                    f.write(f'{name},{c.linear.x:.3f},{c.angular.z:.3f},{" ".join(f"{r:.2f}" for r in scan.ranges)}\n')
 
 
 @launch_testing.post_shutdown_test()
