@@ -14,6 +14,8 @@ from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 
 
+SCAN_TIMEOUT = 0.5  # s, newest /scan older than this stops the robot
+
 class PatrolController(LifecycleNode):
     
     def __init__(self):
@@ -149,6 +151,7 @@ class PatrolController(LifecycleNode):
     def _laser_callback(self, msg):
         """Reduce the scan to front / side clearances and side lane widths."""
         self.latest_scan = msg
+        self.last_scan_time = self.get_clock().now()
         if not msg.ranges or msg.angle_increment == 0.0:
             return
 
@@ -169,7 +172,15 @@ class PatrolController(LifecycleNode):
         """10 Hz reactive step: forward if clear, else stop and turn toward the wider safe lane."""
         if self.latest_scan is None:
             return
-        
+
+        # A stale scan is no scan: stop instead of driving on old data (LiDAR unplugged, driver crash).
+        # The LDS publishes at ~5 Hz, so 0.5 s tolerates one or two dropped scans.
+        age = (self.get_clock().now() - self.last_scan_time).nanoseconds * 1e-9
+        if age > SCAN_TIMEOUT:
+            self.cmd_vel_pub.publish(Twist())
+            self.get_logger().warn(f'No /scan for {age:.1f} s: stopped', throttle_duration_sec=2.0)
+            return
+
         cmd = Twist()
         
         if self.front_clear:
