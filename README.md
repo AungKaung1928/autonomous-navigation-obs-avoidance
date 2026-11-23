@@ -13,7 +13,7 @@ Stack: ROS 2 Humble · Gazebo Harmonic (gz-sim 8) via `ros-humble-ros-gzharmonic
 sudo apt install gz-harmonic ros-humble-ros-gzharmonic ros-humble-turtlebot3-description \
                  ros-humble-xacro ros-humble-robot-state-publisher
 mkdir -p ~/patrol_ws/src && cd ~/patrol_ws/src
-git clone <this repo URL>
+git clone https://github.com/AungKaung1928/autonomous-navigation-obs-avoidance.git
 cd .. && colcon build --symlink-install && source install/setup.bash
 
 pkill -9 -f "gz sim"      # stale gz servers share the bus and corrupt /clock and /odom
