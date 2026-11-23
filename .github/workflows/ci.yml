@@ -43,3 +43,8 @@ jobs:
           path: |
             scenes.csv
             scenes.svg
+      - name: Lint (ament tests shipped in test/; test_copyright skips itself, no headers)
+        run: |
+          source install/setup.bash
+          cd src/simple_navigation_project
+          python3 -m pytest test/test_flake8.py test/test_pep257.py test/test_copyright.py -v
