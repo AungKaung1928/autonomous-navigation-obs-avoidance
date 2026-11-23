@@ -36,7 +36,7 @@ Without Gazebo: `cd src/simple_navigation_project && launch_test test/test_launc
 
 The node's decision per launch-test scene (CI run 1d1a5d5, CSV artifact plotted by `scripts/plot_scenes.py`): synthetic scans, the command it returned.
 
-If `/scan` stops (no message for 0.5 s), the node publishes a zero `/cmd_vel` instead of driving on the last scan; `test/test_launch_stale_scan.py` checks this in CI.
+If `/scan` stops (no message for 0.5 s), the node publishes a zero `/cmd_vel` instead of driving on the last scan; `test/test_launch_stale_scan.py` checks this in CI. Lifecycle `deactivate` sends a stop first and the node then stays silent (`test/test_launch_deactivate.py`).
 
 ## Measured (Gazebo Harmonic, headless, 120 s, turtlebot3_world, spawn (-2.0, -0.5))
 Independent 10 Hz recorder on `/odom` and `/scan`:
