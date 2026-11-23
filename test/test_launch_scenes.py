@@ -1,8 +1,10 @@
-"""Launch test: the installed lifecycle node runs as its own process with the shipped parameters.
+"""
+Launch test: the installed lifecycle node runs with the shipped parameters.
 
 The test process publishes synthetic TurtleBot3 LDS scans on /scan and reads /cmd_vel:
 open space -> drive forward; obstacle ahead with the left side blocked -> turn right;
-obstacle ahead with the right side blocked -> turn left. After shutdown the process must exit cleanly.
+obstacle ahead with the right side blocked -> turn left. After shutdown the process must
+exit cleanly.
 Run: launch_test test/test_launch_scenes.py (after sourcing the workspace).
 """
 import math
@@ -94,8 +96,10 @@ class TestScenes(unittest.TestCase):
         seen = []
         for name, scan, expect, timeout in [
                 ('open', OPEN, lambda c: c.linear.x == 0.2 and c.angular.z == 0.0, 20.0),
-                ('ahead + left', AHEAD_AND_LEFT, lambda c: c.linear.x == 0.0 and c.angular.z == -0.5, 10.0),
-                ('ahead + right', AHEAD_AND_RIGHT, lambda c: c.linear.x == 0.0 and c.angular.z == 0.5, 10.0)]:
+                ('ahead + left', AHEAD_AND_LEFT,
+                 lambda c: c.linear.x == 0.0 and c.angular.z == -0.5, 10.0),
+                ('ahead + right', AHEAD_AND_RIGHT,
+                 lambda c: c.linear.x == 0.0 and c.angular.z == 0.5, 10.0)]:
             self.drive(scan, expect, timeout=timeout)
             seen.append((name, scan, self.cmds[-1]))
         out = os.environ.get('SCENE_CSV')  # optional, for scripts/plot_scenes.py
@@ -103,7 +107,8 @@ class TestScenes(unittest.TestCase):
             with open(out, 'w') as f:
                 f.write('scene,v,w,ranges\n')
                 for name, scan, c in seen:
-                    f.write(f'{name},{c.linear.x:.3f},{c.angular.z:.3f},{" ".join(f"{r:.2f}" for r in scan.ranges)}\n')
+                    ranges = ' '.join(f'{r:.2f}' for r in scan.ranges)
+                    f.write(f'{name},{c.linear.x:.3f},{c.angular.z:.3f},{ranges}\n')
 
 
 @launch_testing.post_shutdown_test()

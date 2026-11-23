@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Simple autonomous patrol with obstacle avoidance.
+
 Using Lifecycle Node for production deployment.
 """
 
@@ -16,22 +17,23 @@ from sensor_msgs.msg import LaserScan
 
 SCAN_TIMEOUT = 0.5  # s, newest /scan older than this stops the robot
 
+
 class PatrolController(LifecycleNode):
-    
+
     def __init__(self):
         super().__init__('patrol_controller')
-        
+
         # Parameters
         self.declare_parameter('patrol_speed', 0.2)
         self.declare_parameter('turn_speed', 0.5)
         self.declare_parameter('safe_distance', 0.8)
         self.declare_parameter('min_lane_width', 0.8)
-        
+
         self.patrol_speed = self.get_parameter('patrol_speed').value
         self.turn_speed = self.get_parameter('turn_speed').value
         self.safe_distance = self.get_parameter('safe_distance').value
         self.min_lane_width = self.get_parameter('min_lane_width').value
-        
+
         # Sensor data
         self.front_clear = True
         self.left_clear = True
@@ -39,18 +41,18 @@ class PatrolController(LifecycleNode):
         self.left_lane_width = 0.0
         self.right_lane_width = 0.0
         self.latest_scan = None
-        
+
         # Will be initialized in configure
         self.cmd_vel_pub = None
         self.laser_sub = None
         self.timer = None
-        
+
         self.get_logger().info('🤖 Patrol Controller Created')
-    
+
     def on_configure(self, state: LifecycleState) -> TransitionCallbackReturn:
-        """Configure lifecycle state"""
+        """Configure lifecycle state."""
         self.get_logger().info('Configuring...')
-        
+
         try:
             # Create publishers and subscribers
             self.cmd_vel_pub = self.create_lifecycle_publisher(Twist, '/cmd_vel', 10)
@@ -59,24 +61,24 @@ class PatrolController(LifecycleNode):
             self.laser_sub = self.create_subscription(
                 LaserScan, '/scan', self._laser_callback, sensor_qos
             )
-            
+
             self.get_logger().info('✅ Configuration complete')
             return TransitionCallbackReturn.SUCCESS
         except Exception as e:
             self.get_logger().error(f'❌ Configuration failed: {e}')
             return TransitionCallbackReturn.FAILURE
-    
+
     def on_activate(self, state: LifecycleState) -> TransitionCallbackReturn:
-        """Activate lifecycle state"""
+        """Activate lifecycle state."""
         self.get_logger().info('Activating...')
-        
+
         try:
             # Activate publisher
             self.cmd_vel_pub.on_activate(state)
-            
+
             # Start control timer
             self.timer = self.create_timer(0.1, self._move_robot)
-            
+
             self.get_logger().info('✅ Patrol controller activated - Starting patrol')
             self.get_logger().info(f'Safe distance: {self.safe_distance}m')
             self.get_logger().info(f'Min lane width: {self.min_lane_width}m')
@@ -84,54 +86,55 @@ class PatrolController(LifecycleNode):
         except Exception as e:
             self.get_logger().error(f'❌ Activation failed: {e}')
             return TransitionCallbackReturn.FAILURE
-    
+
     def on_deactivate(self, state: LifecycleState) -> TransitionCallbackReturn:
-        """Deactivate lifecycle state"""
+        """Deactivate lifecycle state."""
         self.get_logger().info('Deactivating...')
-        
+
         try:
             # Stop robot
             self._send_stop_command()
-            
+
             # Stop timer
             if self.timer:
                 self.timer.cancel()
                 self.timer = None
-            
+
             # Deactivate publisher
             self.cmd_vel_pub.on_deactivate(state)
-            
+
             self.get_logger().info('✅ Deactivated')
             return TransitionCallbackReturn.SUCCESS
         except Exception as e:
             self.get_logger().error(f'❌ Deactivation failed: {e}')
             return TransitionCallbackReturn.ERROR
-    
+
     def on_cleanup(self, state: LifecycleState) -> TransitionCallbackReturn:
-        """Cleanup lifecycle state"""
+        """Cleanup lifecycle state."""
         self.get_logger().info('Cleaning up...')
-        
+
         try:
             # Destroy publishers and subscriptions
             if self.cmd_vel_pub:
                 self.destroy_lifecycle_publisher(self.cmd_vel_pub)
             if self.laser_sub:
                 self.destroy_subscription(self.laser_sub)
-            
+
             self.get_logger().info('✅ Cleanup complete')
             return TransitionCallbackReturn.SUCCESS
         except Exception as e:
             self.get_logger().error(f'❌ Cleanup failed: {e}')
             return TransitionCallbackReturn.ERROR
-    
+
     def on_shutdown(self, state: LifecycleState) -> TransitionCallbackReturn:
-        """Shutdown lifecycle state"""
+        """Shutdown lifecycle state."""
         self.get_logger().info('Shutting down...')
         self._send_stop_command()
         return TransitionCallbackReturn.SUCCESS
-    
+
     def _sector_min(self, msg, lo_deg: float, hi_deg: float) -> float:
-        """Minimum valid range over a bearing sector in the robot frame (0 = front, +90 = left).
+        """
+        Minimum valid range over a bearing sector in the robot frame (0 = front, +90 = left).
 
         Indices are derived from angle_min / angle_increment, so this works for both the
         Classic LDS convention (angle_min = 0) and gpu_lidar (angle_min = -pi).
@@ -173,7 +176,8 @@ class PatrolController(LifecycleNode):
         if self.latest_scan is None:
             return
 
-        # A stale scan is no scan: stop instead of driving on old data (LiDAR unplugged, driver crash).
+        # A stale scan is no scan: stop instead of driving on old data
+        # (LiDAR unplugged, driver crash).
         # The LDS publishes at ~5 Hz, so 0.5 s tolerates one or two dropped scans.
         age = (self.get_clock().now() - self.last_scan_time).nanoseconds * 1e-9
         if age > SCAN_TIMEOUT:
@@ -182,21 +186,21 @@ class PatrolController(LifecycleNode):
             return
 
         cmd = Twist()
-        
+
         if self.front_clear:
             # PATH IS CLEAR - MOVE FORWARD
             cmd.linear.x = self.patrol_speed
             cmd.angular.z = 0.0
             self.get_logger().info('Moving forward - path clear', throttle_duration_sec=2.0)
-        
+
         else:
             # OBSTACLE DETECTED - STOP AND TURN
             cmd.linear.x = 0.0
-            
+
             # Check if lanes are safe (clear AND wide enough)
             right_safe = self.right_clear and self.right_lane_width > self.min_lane_width
             left_safe = self.left_clear and self.left_lane_width > self.min_lane_width
-            
+
             if right_safe and left_safe:
                 # Both lanes safe - pick wider one
                 if self.right_lane_width >= self.left_lane_width:
@@ -211,7 +215,7 @@ class PatrolController(LifecycleNode):
                         f'Turning LEFT - lane width: {self.left_lane_width:.2f}m',
                         throttle_duration_sec=1.0
                     )
-            
+
             elif right_safe:
                 # Only right is safe
                 cmd.angular.z = -self.turn_speed
@@ -219,7 +223,7 @@ class PatrolController(LifecycleNode):
                     f'Turning RIGHT - safe lane: {self.right_lane_width:.2f}m',
                     throttle_duration_sec=1.0
                 )
-            
+
             elif left_safe:
                 # Only left is safe
                 cmd.angular.z = self.turn_speed
@@ -227,7 +231,7 @@ class PatrolController(LifecycleNode):
                     f'Turning LEFT - safe lane: {self.left_lane_width:.2f}m',
                     throttle_duration_sec=1.0
                 )
-            
+
             else:
                 # No safe lanes - keep rotating to find one
                 cmd.angular.z = self.turn_speed
@@ -241,11 +245,11 @@ class PatrolController(LifecycleNode):
                         'No clear path - rotating to find opening',
                         throttle_duration_sec=1.0
                     )
-        
+
         self.cmd_vel_pub.publish(cmd)
-    
+
     def _send_stop_command(self):
-        """Stop robot safely"""
+        """Stop robot safely."""
         if self.cmd_vel_pub is not None and self.cmd_vel_pub.is_activated and rclpy.ok():
             self.cmd_vel_pub.publish(Twist())
 
@@ -254,19 +258,19 @@ def main(args=None):
     # Keep the context alive through SIGINT so the lifecycle deactivate/stop below can
     # still publish; rclpy's own handler would invalidate it first.
     rclpy.init(args=args, signal_handler_options=SignalHandlerOptions.NO)
-    
+
     node = PatrolController()
     executor = rclpy.executors.SingleThreadedExecutor()
     executor.add_node(node)
-    
+
     try:
         # Transition to configured state
         node.trigger_configure()
         # Transition to active state
         node.trigger_activate()
-        
+
         executor.spin()
-        
+
     except KeyboardInterrupt:
         node.get_logger().info('🛑 Keyboard interrupt - shutting down')
     except Exception as e:

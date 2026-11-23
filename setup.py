@@ -33,7 +33,8 @@ setup(
     zip_safe=True,
     maintainer='Developer',
     maintainer_email='dev@example.com',
-    description='Reactive patrol with obstacle avoidance and lane selection for TurtleBot3 in Gazebo Harmonic (LifecycleNode)',
+    description='Reactive patrol with obstacle avoidance and lane selection for TurtleBot3 in '
+                'Gazebo Harmonic (LifecycleNode)',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={

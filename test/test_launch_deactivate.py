@@ -1,8 +1,10 @@
-"""Launch test: lifecycle deactivate stops the robot. The installed node drives forward on an open
-synthetic scan; the test then calls /patrol_controller/change_state (deactivate) while scans keep
-coming: the last /cmd_vel must be zero, and at most that one stop may arrive after the call. The installed node with the shipped params drives forward on
-an open synthetic scan, then the scans stop; within about 1 s every /cmd_vel must be zero.
-Run: launch_test test/test_launch_stale_scan.py (after sourcing the workspace).
+"""
+Launch test: lifecycle deactivate stops the robot.
+
+The installed node with the shipped params drives forward on an open synthetic scan; the
+test then calls /patrol_controller/change_state (deactivate) while scans keep coming: the
+last /cmd_vel must be zero, and at most that one stop may arrive after the call.
+Run: launch_test test/test_launch_deactivate.py (after sourcing the workspace).
 """
 import math
 import os
@@ -11,7 +13,6 @@ import unittest
 
 import launch
 import launch_ros.actions
-import launch_testing
 import launch_testing.actions
 import pytest
 import rclpy
@@ -65,9 +66,11 @@ class TestStaleScan(unittest.TestCase):
             while time.monotonic() - start < 20.0 and not (cmds and cmds[-1].linear.x > 0.05):
                 pub.publish(scan)
                 rclpy.spin_once(probe, timeout_sec=0.05)
-            self.assertTrue(cmds and cmds[-1].linear.x > 0.05, 'never drove forward on an open scan')
+            self.assertTrue(cmds and cmds[-1].linear.x > 0.05, 'never drove forward on an open '
+                                                               'scan')
             self.assertTrue(cli.wait_for_service(timeout_sec=5.0))
-            fut = cli.call_async(ChangeState.Request(transition=Transition(id=Transition.TRANSITION_DEACTIVATE)))
+            fut = cli.call_async(ChangeState.Request(
+                transition=Transition(id=Transition.TRANSITION_DEACTIVATE)))
             while not fut.done():
                 pub.publish(scan)
                 rclpy.spin_once(probe, timeout_sec=0.05)
@@ -80,8 +83,10 @@ class TestStaleScan(unittest.TestCase):
         finally:
             probe.destroy_node()
         last = cmds[-1]
-        self.assertEqual((last.linear.x, last.angular.z), (0.0, 0.0), 'last command before going inactive is not a stop')
+        self.assertEqual((last.linear.x, last.angular.z), (0.0, 0.0), 'last command before going '
+                                                                      'inactive is not a stop')
         after = cmds[n:]  # the stop itself may arrive after the service reply
         self.assertTrue(all(c.linear.x == 0.0 and c.angular.z == 0.0 for c in after),
-                        f'non-zero command after deactivate: {[(c.linear.x, c.angular.z) for c in after]}')
+                        f'non-zero command after deactivate: '
+                        f'{[(c.linear.x, c.angular.z) for c in after]}')
         self.assertLessEqual(len(after), 1, f'{len(after)} commands after deactivate')

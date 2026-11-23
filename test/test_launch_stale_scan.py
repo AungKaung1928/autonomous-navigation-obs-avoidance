@@ -1,6 +1,9 @@
-"""Launch test: when /scan stops (LiDAR unplugged, driver crash) the node must stop the robot,
-not keep driving on the last scan. The installed node with the shipped params drives forward on
-an open synthetic scan, then the scans stop; within about 1 s every /cmd_vel must be zero.
+"""
+Launch test: when /scan stops the node must stop the robot.
+
+LiDAR unplugged or driver crash: the node must not keep driving on the last scan. The
+installed node with the shipped params drives forward on an open synthetic scan, then the
+scans stop; within about 1 s every /cmd_vel must be zero.
 Run: launch_test test/test_launch_stale_scan.py (after sourcing the workspace).
 """
 import math
@@ -10,7 +13,6 @@ import unittest
 
 import launch
 import launch_ros.actions
-import launch_testing
 import launch_testing.actions
 import pytest
 import rclpy
@@ -61,7 +63,8 @@ class TestStaleScan(unittest.TestCase):
             while time.monotonic() - start < 20.0 and not (cmds and cmds[-1].linear.x > 0.05):
                 pub.publish(scan)
                 rclpy.spin_once(probe, timeout_sec=0.05)
-            self.assertTrue(cmds and cmds[-1].linear.x > 0.05, 'never drove forward on an open scan')
+            self.assertTrue(cmds and cmds[-1].linear.x > 0.05, 'never drove forward on an open '
+                                                               'scan')
             cmds.clear()
             end = time.monotonic() + 2.0  # scans stop here
             while time.monotonic() < end:
@@ -71,4 +74,5 @@ class TestStaleScan(unittest.TestCase):
         late = [c for c in cmds[len(cmds) // 2:]]  # the second second after the last scan
         self.assertTrue(late, 'no /cmd_vel after the scans stopped')
         self.assertTrue(all(c.linear.x == 0.0 and c.angular.z == 0.0 for c in late),
-                        f'still moving 1-2 s after the last scan: {[(round(c.linear.x, 2), round(c.angular.z, 2)) for c in late[-3:]]}')
+                        f'still moving 1-2 s after the last scan: '
+                        f'{[(round(c.linear.x, 2), round(c.angular.z, 2)) for c in late[-3:]]}')
